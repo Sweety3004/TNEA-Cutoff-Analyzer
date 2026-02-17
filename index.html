@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TNEA Cutoff Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #64748b;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+
+            /* Dark Theme Colors */
+            --background: #0f172a;
+            /* Deep blue/black */
+            --surface: #1e293b;
+            /* Slate 800 */
+            --surface-hover: #334155;
+            --border: #334155;
+            --text: #f8fafc;
+            /* Slate 50 */
+            --text-muted: #94a3b8;
+            /* Slate 400 */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Utility */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .gap-4 {
+            gap: 1rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mt-4 {
+            margin-top: 1rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Header / Navbar */
+        .navbar {
+            background-color: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            background: var(--primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .logo-text {
+            line-height: 1.2;
+        }
+
+        .logo-network {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-sub {
+            font-size: 0.75rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0 4rem;
+            text-align: center;
+            background: radial-gradient(circle at top center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .stat-title {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Top Colleges List */
+        .top-list-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .top-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .top-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .college-rank-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .rank-badge {
+            width: 28px;
+            height: 28px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        /* Section Styles */
+        .section-container {
+            padding: 2rem 0 4rem;
+        }
+
+        /* Hide sections by default */
+        .app-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .app-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        /* Steps Grid */
+        .steps-wrapper {
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .step-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Chat Bot */
+        .chatbot-btn {
+            position: fixed;
+            top: 120px;
+            /* Below navbar */
+            left: 20px;
+            padding: 0 1.5rem;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 30px;
+            /* Pill shape */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            cursor: pointer;
+            z-index: 999;
+            transition: transform 0.2s;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .chatbot-btn:hover {
+            transform: scale(1.05);
+            background: var(--primary-dark);
+        }
+
+        .chatbot-window {
+            position: fixed;
+            top: 190px;
+            /* Below button */
+            left: 20px;
+            width: 350px;
+            height: 500px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .chatbot-window.open {
+            display: flex;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background: var(--background);
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--background);
+            color: var(--text);
+            outline: none;
+        }
+
+        .chat-send {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .message.bot {
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 12px 12px 12px 0;
+            border: 1px solid var(--border);
+        }
+
+        .message.user {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+            border-radius: 12px 12px 0 12px;
+        }
+
+        /* --- Existing Components --- */
+
+        /* Filters */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 0.375rem;
+        }
+
+        .filter-select,
+        .filter-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            background: var(--background);
+            color: var(--text);
+            transition: border-color 0.2s;
+        }
+
+        .filter-select:focus,
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: rgba(15, 23, 42, 0.5);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: var(--surface-hover);
+        }
+
+        .branch-code {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--primary);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .cutoff-value {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+
+        .cutoff-value.high {
+            color: var(--success);
+        }
+
+        .cutoff-value.medium {
+            color: var(--accent);
+        }
+
+        .cutoff-value.low {
+            color: var(--danger);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* Course Cards */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .course-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+        }
+
+        .course-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: var(--background);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin-right: 0.25rem;
+            margin-bottom: 0.25rem;
+            border: 1px solid var(--border);
+        }
+
+        /* Loading */
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 4rem;
+            background: var(--background);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo" onclick="switchTab('dashboard')">
+                <div class="logo-icon">🎓</div>
+                <div class="logo-text">
+                    <div class="logo-network">TNEA</div>
+                    <div class="logo-sub">Cutoff Analyzer</div>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <button class="nav-link active" data-tab="dashboard" onclick="switchTab('dashboard')">Home</button>
+                <button class="nav-link" data-tab="cutoff" onclick="switchTab('cutoff')">Search Cutoffs</button>
+                <button class="nav-link" data-tab="courses" onclick="switchTab('courses')">Course Insights</button>
+                <button class="nav-link" data-tab="rankings" onclick="switchTab('rankings')">Rankings</button>
+                <button class="nav-link" data-tab="compare" onclick="switchTab('compare')">Compare</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home / Dashboard Section -->
+        <section id="dashboard" class="app-section active">
+            <div class="hero">
+                <div class="container">
+                    <h1 class="hero-title">
+                        TNEA <br>
+                        <span class="gradient-text">Cutoff Analyzer</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Your complete platform for understanding TNEA college cutoff data, engineering streams, and
+                        making data-driven decisions about your future.
+                    </p>
+                </div>
+            </div>
+
+            <div class="container section-container">
+                <!-- Dashboard Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Colleges</div>
+                        <div class="stat-value" id="dashColleges">...</div>
+                        <div class="stat-desc">Participating Institutions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Total Branches</div>
+                        <div class="stat-value" id="dashBranches">...</div>
+                        <div class="stat-desc">Engineering Streams</div>
+                    </div>
+                </div>
+
+                <!-- Steps (Moved down) -->
+                <div class="steps-wrapper">
+                    <h2 class="section-title" style="text-align:center;">How It Works</h2>
+                    <div class="steps-grid">
+                        <div class="step-card" onclick="switchTab('cutoff')" style="cursor:pointer"
+                            title="Go to Search">
+                            <div class="step-icon">🎯</div>
+                            <h3>Filter</h3>
+                            <p style="color:var(--text-muted)">Select your preferred branch and category.</p>
+                        </div>
+                        <div class="step-card" onclick="switchTab('compare')" style="cursor:pointer"
+                            title="Go to Compare">
+                            <div class="step-icon">📊</div>
+                            <h3>Analyze</h3>
+                            <p style="color:var(--text-muted)">Compare cutoffs across multiple years.</p>
+                        </div>
+                        <div class="step-card" onclick="toggleChat()" style="cursor:pointer" title="Open Chat">
+                            <div class="step-icon">🤖</div>
+                            <h3>AI Assist</h3>
+                            <p style="color:var(--text-muted)">Use our chat bot for quick college queries.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cutoff Data Section -->
+        <section id="cutoff" class="app-section">
+            <div class="container section-container">
+                <h2 class="section-title">Search Cutoff Data</h2>
+
+                <div class="filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Year</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn active year-btn" data-year="2024">2024</button>
+                            <button class="btn year-btn" data-year="2023">2023</button>
+                        </div>
+                    </div>
+                    <div class="filter-group" style="flex: 2;">
+                        <label class="filter-label">Search</label>
+                        <input type="text" class="filter-input" id="searchInput"
+                            placeholder="Search college or branch name...">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Category</label>
+                        <select class="filter-select" id="categoryFilter">
+                            <option value="OC">OC</option>
+                            <option value="BC">BC</option>
+                            <option value="BCM">BCM</option>
+                            <option value="MBC">MBC</option>
+                            <option value="SC">SC</option>
+                            <option value="SCA">SCA</option>
+                            <option value="ST">ST</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Branch</label>
+                        <select class="filter-select" id="branchFilter">
+                            <option value="">All Branches</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>College</th>
+                                <th>Branch</th>
+                                <th>OC</th>
+                                <th>BC</th>
+                                <th>BCM</th>
+                                <th>MBC</th>
+                                <th>SC</th>
+                                <th>SCA</th>
+                                <th>ST</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cutoffTable">
+                            <!-- Data populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </section>
+
+        <!-- Course Insights Section -->
+        <section id="courses" class="app-section">
+            <div class="container section-container">
+                <h2 class="section-title">Course Insights</h2>
+                <div class="filters">
+                    <input type="text" class="filter-input" id="courseSearch"
+                        placeholder="Search for detailed course information...">
+                </div>
+                <div class="course-grid" id="courseGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Rankings Section -->
+        <section id="rankings" class="app-section">
+            <div class="container section-container">
+                <h2 class="section-title">NIRF Rankings</h2>
+                <div class="filters">
+                    <input type="text" class="filter-input" id="rankingSearch" placeholder="Search college rankings...">
+                </div>
+                <div id="rankingsList">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Compare Section -->
+        <section id="compare" class="app-section">
+            <div class="container section-container">
+                <h2 class="section-title">Compare Colleges</h2>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label class="filter-label">College 1</label>
+                        <select class="filter-select" id="college1"></select>
+                        <select class="filter-select mt-4" id="branch1" disabled>
+                            <option value="">Select Branch (Optional)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">College 2</label>
+                        <select class="filter-select" id="college2"></select>
+                        <select class="filter-select mt-4" id="branch2" disabled>
+                            <option value="">Select Branch (Optional)</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="comparisonResult"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TNEA Cutoff Analyzer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Chat Bot UI -->
+    <button class="chatbot-btn" onclick="toggleChat()" title="Chat with AI">
+        <span style="font-size: 1.5rem;">🤖</span>
+        <span>Chat AI</span>
+    </button>
+
+    <div class="chatbot-window" id="chatWindow">
+        <div class="chat-header">
+            <span>TNEA AI Assistant</span>
+            <span style="cursor:pointer" onclick="toggleChat()">✕</span>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="message bot">
+                Hello! I can help you with college cutoffs, course details, and finding the best college for your score.
+                How can I assist you today?
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..."
+                onkeypress="handleChatKey(event)">
+            <button class="chat-send" onclick="sendChatMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Global State
+        let appState = {
+            cutoffData2024: [],
+            cutoffData2023: [],
+            courseInsights: [],
+            rankings: [],
+            currentData: [],
+            currentPage: 1,
+            year: '2024'
+        };
+
+        const ITEMS_PER_PAGE = 25;
+
+        // --- Navigation ---
+        function switchTab(tabId) {
+            // Update Nav UI
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.tab === tabId) link.classList.add('active');
+            });
+
+            // Update Section Visibility
+            document.querySelectorAll('.app-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // --- Data Loading ---
+        async function loadData() {
+            const showLoading = () => {
+                document.getElementById('cutoffTable').innerHTML = `<tr><td colspan="10"><div class="spinner"></div></td></tr>`;
+            };
+            showLoading();
+
+            try {
+                // Fetch data in parallel
+                const [cut24, cut23, courses, ranks] = await Promise.all([
+                    fetch('TNEA2024CutOff.json').then(r => r.json()).catch(() => []),
+                    fetch('TNEA2023CutOff.json').then(r => r.json()).catch(() => []),
+                    fetch('TNEAcourseInsights.json').then(r => r.json()).catch(() => ({})),
+                    fetch('2024_TNEA_NIRF_Ranking.json').then(r => r.json()).catch(() => [])
+                ]);
+
+                // Store Data
+                appState.cutoffData2024 = cut24.length ? cut24 : generateSampleData();
+                appState.cutoffData2023 = cut23;
+                appState.courseInsights = Object.entries(courses).map(([name, info]) => ({ name, ...info }));
+                appState.rankings = ranks;
+
+                appState.currentData = appState.cutoffData2024;
+
+                // Initial Render
+                renderAll();
+
+            } catch (e) {
+                console.error("Initialization Failed", e);
+                // Fallback to sample data
+                appState.cutoffData2024 = generateSampleData();
+                appState.currentData = appState.cutoffData2024;
+                renderAll();
+            }
+        }
+
+        function generateSampleData() {
+            // Fallback for demo if files missing
+            const colleges = [
+                'University Departments of Anna University Chennai - CEG Campus',
+                'University Departments of Anna University Chennai - ACT Campus',
+                'University Departments of Anna University Chennai - MIT Campus',
+                'College of Engineering Guindy',
+                'PSG College of Technology',
+                'Coimbatore Institute of Technology'
+            ];
+            const data = [];
+            colleges.forEach((c, i) => {
+                data.push({
+                    con: c, brc: 'CS', brn: 'COMPUTER SCIENCE',
+                    OC: 195 - i, BC: 190 - i, MBC: 185 - i
+                });
+            });
+            return data;
+        }
+
+        // --- Rendering ---
+        function renderAll() {
+            populateBranchFilter();
+            populateComparisonSelects();
+            renderCutoffTable();
+            renderCourseInsights();
+            renderRankings();
+            updateDashboard(); // Important: Render dashboard stats
+        }
+
+        function updateDashboard() {
+            const data = appState.cutoffData2024;
+            if (!data || data.length === 0) return;
+
+            // 1. Stats Cards
+            const colleges = new Set(data.map(d => d.con)).size;
+            const branches = new Set(data.map(d => d.brc)).size;
+
+            document.getElementById('dashColleges').innerText = colleges;
+            document.getElementById('dashBranches').innerText = branches;
+        }
+
+        // 1. Cutoff Table
+        function renderCutoffTable() {
+            const tbody = document.getElementById('cutoffTable');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const branch = document.getElementById('branchFilter').value;
+            const year = appState.year;
+
+            // Use correct dataset
+            const sourceData = year === '2024' ? appState.cutoffData2024 : appState.cutoffData2023;
+
+            // Filter
+            const filtered = sourceData.filter(item => {
+                const s = search;
+                // Strict College Name 'Starts With' Search
+                const matchesSearch = !s || (item.con && item.con.toLowerCase().startsWith(s));
+                const matchesBranch = !branch || item.brc === branch;
+                return matchesSearch && matchesBranch;
+            });
+
+            // Pagination
+            const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+            const start = (appState.currentPage - 1) * ITEMS_PER_PAGE;
+            const pageData = filtered.slice(start, start + ITEMS_PER_PAGE);
+
+            if (pageData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 2rem;">No results found</td></tr>`;
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            tbody.innerHTML = pageData.map(item => `
+                <tr>
+                    <td><span class="branch-code">${item.brc || '-'}</span></td>
+                    <td title="${item.con}">${item.con}</td>
+                    <td>${item.brn}</td>
+                    <td class="cutoff-value ${getCutoffClass(item.OC)}">${item.OC || '-'}</td>
+                    <td class="cutoff-value ${getCutoffClass(item.BC)}">${item.BC || '-'}</td>
+                    <td class="cutoff-value ${getCutoffClass(item.BCM)}">${item.BCM || '-'}</td>
+                    <td class="cutoff-value ${getCutoffClass(item.MBC)}">${item.MBC || '-'}</td>
+                    <td class="cutoff-value ${getCutoffClass(item.SC)}">${item.SC || '-'}</td>
+                    <td class="cutoff-value ${getCutoffClass(item.SCA)}">${item.SCA || '-'}</td>
+                    <td class="cutoff-value ${getCutoffClass(item.ST)}">${item.ST || '-'}</td>
+                </tr>
+            `).join('');
+
+            renderPagination(totalPages);
+        }
+
+        function getCutoffClass(val) {
+            if (!val) return '';
+            const n = parseFloat(val);
+            if (n > 185) return 'high';
+            if (n > 160) return 'medium';
+            return 'low';
+        }
+
+        function renderPagination(total) {
+            const el = document.getElementById('pagination');
+            if (total <= 1) { el.innerHTML = ''; return; }
+
+            const curr = appState.currentPage;
+            let html = `
+                <button class="btn" onclick="changePage(${curr - 1})" ${curr === 1 ? 'disabled' : ''}>Prev</button>
+                <span style="display:flex; align-items:center; padding:0 1rem; color:var(--text-muted)">Page ${curr} of ${total}</span>
+                <button class="btn" onclick="changePage(${curr + 1})" ${curr === total ? 'disabled' : ''}>Next</button>
+            `;
+            el.innerHTML = html;
+        }
+
+        function changePage(p) {
+            appState.currentPage = p;
+            renderCutoffTable();
+        }
+
+        // 2. Filters
+        function populateBranchFilter() {
+            const select = document.getElementById('branchFilter');
+            // Create a map of code -> name to ensure unique branches
+            const branchMap = new Map();
+            appState.currentData.forEach(d => {
+                if (d.brc && d.brn && !branchMap.has(d.brc)) {
+                    branchMap.set(d.brc, d.brn);
+                }
+            });
+
+            // Sort by branch code
+            const sortedBranches = Array.from(branchMap.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+
+            select.innerHTML = '<option value="">All Branches</option>' +
+                sortedBranches.map(([code, name]) => `<option value="${code}">${code} - ${name}</option>`).join('');
+        }
+
+        function populateCollegeSelects() {
+            const colleges = [...new Set(appState.currentData.map(d => d.con))].filter(Boolean).sort();
+            const opts = '<option value="">Select College</option>' +
+                colleges.map(c => `<option value="${c}">${c}</option>`).join('');
+            document.getElementById('college1').innerHTML = opts;
+            document.getElementById('college2').innerHTML = opts;
+        }
+
+        // 3. Course Insights
+        function renderCourseInsights() {
+            const grid = document.getElementById('courseGrid');
+            const term = document.getElementById('courseSearch').value.toLowerCase();
+
+            const filtered = appState.courseInsights.filter(c =>
+                c.name.toLowerCase().includes(term)
+            );
+
+            grid.innerHTML = filtered.slice(0, 20).map(c => `
+                <div class="course-card">
+                    <h3>${c.name}</h3>
+                    <p>${c['Course Description'] || 'No description available.'}</p>
+                    <div>
+                        ${(c['Fundamental Concepts'] || []).slice(0, 3).map(t => `<span class="tag">${t}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align:center; grid-column:1/-1">No courses found</p>';
+        }
+
+        // 4. Rankings
+        function renderRankings() {
+            const list = document.getElementById('rankingsList');
+            const term = document.getElementById('rankingSearch').value.toLowerCase();
+            const filtered = appState.rankings.filter(r => r.college.toLowerCase().includes(term));
+
+            if (!filtered.length) {
+                list.innerHTML = `<p style="text-align:center">No rankings found</p>`;
+                return;
+            }
+
+            list.innerHTML = filtered.slice(0, 20).map(r => `
+                <div style="background:var(--surface); padding:1rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-weight:600">${r.college}</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted)">State: ${r.state || 'TN'}</div>
+                    </div>
+                    <div style="background:var(--primary); padding:0.5rem 1rem; border-radius:8px; font-weight:bold;">#${r.ranking}</div>
+                </div>
+             `).join('');
+        }
+
+        // 5. Compare Logic
+        // Populate Colleges for Comparison
+        function populateComparisonSelects() {
+            const data = appState.currentData;
+            const uniqueColleges = [...new Set(data.map(d => d.con))].filter(Boolean).sort();
+
+            const c1 = document.getElementById('college1');
+            const c2 = document.getElementById('college2');
+            const b1 = document.getElementById('branch1');
+            const b2 = document.getElementById('branch2');
+
+            const createOptions = () => '<option value="">Select College</option>' +
+                uniqueColleges.map(c => `<option value="${c}">${c}</option>`).join('');
+
+            c1.innerHTML = createOptions();
+            c2.innerHTML = createOptions();
+            b1.innerHTML = '<option value="">All Branches (Show Average)</option>';
+            b2.innerHTML = '<option value="">All Branches (Show Average)</option>';
+            b1.disabled = true;
+            b2.disabled = true;
+
+            // Helper to populate branches for a college
+            const populateBranches = (collegeName, branchSelectId) => {
+                const branchSelect = document.getElementById(branchSelectId);
+                branchSelect.innerHTML = '<option value="">All Branches (Show Average)</option>';
+
+                if (!collegeName) {
+                    branchSelect.disabled = true;
+                    return;
+                }
+
+                const collegeBranches = data.filter(d => d.con === collegeName)
+                    .sort((a, b) => a.brn.localeCompare(b.brn));
+
+                // Use branch code as value, show name in text
+                collegeBranches.forEach(b => {
+                    const opt = document.createElement('option');
+                    opt.value = b.brc;
+                    opt.textContent = `${b.brc} - ${b.brn}`;
+                    branchSelect.appendChild(opt);
+                });
+                branchSelect.disabled = false;
+            };
+
+            c1.addEventListener('change', (e) => {
+                populateBranches(e.target.value, 'branch1');
+                updateComparison();
+            });
+
+            c2.addEventListener('change', (e) => {
+                populateBranches(e.target.value, 'branch2');
+                updateComparison();
+            });
+
+            b1.addEventListener('change', updateComparison);
+            b2.addEventListener('change', updateComparison);
+        }
+
+        function updateComparison() {
+            const c1 = document.getElementById('college1').value;
+            const c2 = document.getElementById('college2').value;
+            const b1 = document.getElementById('branch1').value; // Branch Code
+            const b2 = document.getElementById('branch2').value; // Branch Code
+
+            const res = document.getElementById('comparisonResult');
+
+            if (!c1 || !c2) {
+                res.innerHTML = '';
+                return;
+            }
+
+            // Filter data
+            let data1 = appState.currentData.filter(d => d.con === c1);
+            let data2 = appState.currentData.filter(d => d.con === c2);
+
+            // If branch is selected, narrow down to that specific branch record
+            const branchRec1 = b1 ? data1.find(d => d.brc === b1) : null;
+            const branchRec2 = b2 ? data2.find(d => d.brc === b2) : null;
+
+            const calcAvg = (data, cat) => {
+                const valid = data.map(d => parseFloat(d[cat])).filter(n => !isNaN(n));
+                if (!valid.length) return '-';
+                return (valid.reduce((a, b) => a + b, 0) / valid.length).toFixed(2);
+            };
+
+            const categories = ['OC', 'BC', 'BCM', 'MBC', 'SC', 'SCA', 'ST'];
+
+            const renderStats = (data, name, branchRec) => {
+                let contextTitle = branchRec ? `${branchRec.brn} (${branchRec.brc})` : `${data.length} Branch Options`;
+                let isSpecific = !!branchRec;
+
+                return `
+                <div style="background:var(--surface); padding:1.5rem; border-radius:12px; border:1px solid var(--border);">
+                    <h3 style="margin-bottom:0.25rem; font-size:1.1rem; color:var(--primary); line-height:1.4;">${name}</h3>
+                    <p style="color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">${contextTitle}</p>
+                    
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
+                        ${categories.map(cat => {
+                    // Value to display: Either specific branch cutoff OR average
+                    let val = '-';
+                    if (isSpecific) {
+                        val = branchRec[cat] || '-';
+                    } else {
+                        val = calcAvg(data, cat);
+                    }
+                    return `
+                            <div style="display:flex; justify-content:space-between; padding:0.5rem; background:rgba(255,255,255,0.03); border-radius:6px;">
+                                <span style="color:var(--text-muted); font-size:0.9rem;">${cat}</span>
+                                <span style="font-weight:600; font-family:'Courier New'; ${isSpecific ? 'color:var(--accent);' : ''}">${val}</span>
+                            </div>
+                            `;
+                }).join('')}
+                    </div>
+                </div>
+            `};
+
+            res.innerHTML = `
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem; margin-top:2rem;">
+                    ${renderStats(data1, c1, branchRec1)}
+                    ${renderStats(data2, c2, branchRec2)}
+                </div>
+            `;
+        }
+
+        // --- Chat Bot Logic ---
+        function toggleChat() {
+            const win = document.getElementById('chatWindow');
+            if (win.style.display === 'flex') {
+                win.style.display = 'none';
+                win.classList.remove('open');
+            } else {
+                win.style.display = 'flex';
+                setTimeout(() => win.classList.add('open'), 10);
+                document.getElementById('chatInput').focus();
+            }
+        }
+
+        function handleChatKey(e) {
+            if (e.key === 'Enter') sendChatMessage();
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            addMessage(msg, 'user');
+            input.value = '';
+
+            // Simulate Bot Response
+            setTimeout(() => {
+                const response = getBotResponse(msg);
+                addMessage(response, 'bot');
+            }, 600);
+        }
+
+        function addMessage(text, sender) {
+            const body = document.getElementById('chatBody');
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            div.textContent = text;
+            body.appendChild(div);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function getBotResponse(input) {
+            input = input.toLowerCase();
+            if (input.includes('cutoff') || input.includes('score')) return "You can check cutoffs in the 'Search Cutoffs' tab. Just enter your score or college name.";
+            if (input.includes('college') || input.includes('best')) return "The top colleges are usually Anna University (CEG, MIT), PSG, and SSN. Check the 'Rankings' tab for more info.";
+            if (input.includes('cse') || input.includes('computer')) return "CSE is very popular! Cutoffs are usually high (>190 for top colleges).";
+            return "That's an interesting question. Try searching in the Cutoff or Course Insights tabs for more specific details.";
+        }
+
+        // --- Event Listeners ---
+        document.getElementById('searchInput').addEventListener('input', () => { appState.currentPage = 1; renderCutoffTable(); });
+        document.getElementById('categoryFilter').addEventListener('change', renderCutoffTable);
+        document.getElementById('branchFilter').addEventListener('change', renderCutoffTable);
+        document.querySelectorAll('.year-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                appState.year = e.target.dataset.year;
+                appState.currentPage = 1;
+                renderCutoffTable();
+            });
+        });
+
+        document.getElementById('courseSearch').addEventListener('input', renderCourseInsights);
+        document.getElementById('rankingSearch').addEventListener('input', renderRankings);
+
+        // Init
+        loadData();
+
+    </script>
+</body>
+
+</html>
