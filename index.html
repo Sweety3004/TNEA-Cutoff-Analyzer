@@ -854,6 +854,238 @@
             }
         }
 
+        /* Quiz Styles */
+        .quiz-option {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.03);
+            transform: translateX(8px);
+        }
+
+        .quiz-option h5 {
+            margin-bottom: 0.25rem;
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .quiz-option p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .quiz-progress-container {
+            background: var(--surface-hover);
+            border-radius: 8px;
+            padding: 2px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        /* Course Comparison Module Styles */
+        .compare-toggle-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            background: var(--surface);
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .compare-toggle-btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .compare-toggle-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .branch-comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .branch-compare-card {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .branch-compare-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .compare-v-badge {
+            position: absolute;
+            top: 50%;
+            left: -1rem;
+            transform: translateY(-50%);
+            background: var(--primary);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.8rem;
+            border: 4px solid var(--background);
+            z-index: 10;
+        }
+
+        .comparison-metric-row {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .comparison-metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.35rem;
+            display: block;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .decision-helper-box {
+            margin-top: 3rem;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(124, 58, 237, 0.05) 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px dashed var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .decision-helper-box::before {
+            content: "💡";
+            position: absolute;
+            top: -1rem;
+            right: -1rem;
+            font-size: 6rem;
+            opacity: 0.1;
+        }
+
+        .advisor-card {
+            background: rgba(37, 99, 235, 0.04);
+            border: 1px solid rgba(37, 99, 235, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            text-align: left;
+            margin-bottom: 2rem;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .advisor-avatar-container {
+            flex-shrink: 0;
+        }
+
+        .advisor-avatar {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--primary);
+        }
+
+        .advisor-content {
+            flex: 1;
+        }
+
+        .advisor-content h4 {
+            margin: 0 0 0.25rem 0;
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .advisor-greeting {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .advisor-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .advisor-text strong {
+            color: var(--primary);
+        }
+
+        .roi-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
         /* --- Premium CTA Section --- */
         .premium-cta {
             background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(124, 58, 237, 0.05) 100%);
@@ -2798,17 +3030,19 @@
                     <div id="goalSelection" class="form-card" style="display:none; text-align:center;">
                         <div style="font-size:4rem; margin-bottom:1.5rem;">🎯</div>
                         <h3>What is your Goal?</h3>
-                        <p class="form-desc">Select a branch you are most interested in, or explore all options.</p>
+                        <p class="form-desc">Select a branch you are most interested in, or use our smart discovery
+                            tool.</p>
+
+                        <div
+                            style="margin-bottom:2.5rem; padding: 1.5rem; background: var(--surface-hover); border-radius: 12px; border: 1px dashed var(--primary);">
+                            <p style="color:var(--text); font-weight: 600; font-size:1rem; margin-bottom:1rem;">Unsure?
+                                Let us help you find your path! ✨</p>
+                            <button class="btn-primary" onclick="proceedToModeSelection()"
+                                style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Help me Discover →</button>
+                        </div>
 
                         <div class="goal-selection-grid" id="goalGrid">
                             <!-- Populated by JS -->
-                        </div>
-
-                        <div style="margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border);">
-                            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1rem;">Not sure? Explore
-                                all branches based on your score.</p>
-                            <button class="btn-secondary" onclick="proceedToModeSelection()">I'm Undecided - Help me
-                                Discover</button>
                         </div>
                     </div>
 
@@ -2829,6 +3063,32 @@
                                 <h4>Guided Comparison</h4>
                                 <p>I'm confused between 2 or 3 specific branches. Help me decide!</p>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Interest Quiz Question Section -->
+                    <div id="interestQuiz" class="form-card" style="display:none; text-align:center;">
+                        <div class="quiz-progress-container" style="margin-bottom: 2rem;">
+                            <div
+                                style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.85rem; color:var(--text-muted);">
+                                <span id="quizStepText">Question 1 of 30</span>
+                                <span id="quizPercentText">0% Complete</span>
+                            </div>
+                            <div
+                                style="height:8px; background:var(--surface-hover); border-radius:4px; overflow:hidden; border:1px solid var(--border);">
+                                <div id="quizProgressBar"
+                                    style="width: 0%; height:100%; background:linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.3s ease;">
+                                </div>
+                            </div>
+                        </div>
+                        <h3 id="quizQuestion" style="font-size:1.5rem; margin-bottom:1rem; color:var(--primary);">
+                            Question Text</h3>
+                        <p id="quizDesc" style="color:var(--text-muted); margin-bottom:2rem; font-size:0.95rem;">
+                            Question description goes here.</p>
+
+                        <div id="quizOptions" class="quiz-options-grid"
+                            style="display:flex; flex-direction:column; gap:1rem;">
+                            <!-- Options populated by JS -->
                         </div>
                     </div>
 
@@ -2991,53 +3251,78 @@
         <!-- Compare Section -->
         <section id="compare" class="app-section">
             <div class="container section-container">
-                <h2 class="section-title">Compare Courses</h2>
-                <p style="color:var(--text-muted); text-align:center; margin-bottom:2rem;">Select a course based on your
-                    score, then compare how different colleges offer it.</p>
+                <h2 class="section-title">Course & College Comparison</h2>
+                <p style="color:var(--text-muted); text-align:center; margin-bottom:2rem;">Make data-driven decisions by
+                    comparing colleges or entire engineering branches side-by-side.</p>
 
-                <div class="filters" style="flex-direction:column; gap:1.5rem;">
-                    <!-- New Flow Step 1: Cutoff entry -->
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%;">
-                        <div class="filter-group">
-                            <label class="filter-label">1. Your Cutoff Mark</label>
-                            <input type="number" class="filter-input" id="compareCutoff" placeholder="e.g. 185.5"
-                                oninput="updateCompareBranches()">
+                <!-- Comparison Mode Toggle -->
+                <div class="compare-toggle-container">
+                    <button class="compare-toggle-btn active" onclick="switchCompareMode('college')">Compare
+                        Colleges</button>
+                    <button class="compare-toggle-btn" onclick="switchCompareMode('branch')">Compare Branches</button>
+                </div>
+
+                <!-- College Comparison UI (Default) -->
+                <div id="collegeCompareUI">
+                    <div class="filters" style="flex-direction:column; gap:1.5rem;">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%;">
+                            <div class="filter-group">
+                                <label class="filter-label">1. Your Cutoff Mark</label>
+                                <input type="number" class="filter-input" id="compareCutoff" placeholder="e.g. 185.5"
+                                    oninput="updateCompareBranches()">
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">2. Category</label>
+                                <select class="filter-select" id="compareCategory" onchange="updateCompareBranches()">
+                                    <option value="OC">OC</option>
+                                    <option value="BC">BC</option>
+                                    <option value="BCM">BCM</option>
+                                    <option value="MBC" selected>MBC</option>
+                                    <option value="SC">SC</option>
+                                    <option value="SCA">SCA</option>
+                                    <option value="ST">ST</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="filter-group">
-                            <label class="filter-label">2. Category</label>
-                            <select class="filter-select" id="compareCategory" onchange="updateCompareBranches()">
-                                <option value="OC">OC</option>
-                                <option value="BC">BC</option>
-                                <option value="BCM">BCM</option>
-                                <option value="MBC" selected>MBC</option>
-                                <option value="SC">SC</option>
-                                <option value="SCA">SCA</option>
-                                <option value="ST">ST</option>
+                        <div class="filter-group" style="width:100%;">
+                            <label class="filter-label">3. Select Course to Compare</label>
+                            <select class="filter-select" id="compareBranch" disabled
+                                onchange="updateCompareColleges()">
+                                <option value="">Enter cutoff first...</option>
                             </select>
                         </div>
-                    </div>
-
-                    <!-- New Flow Step 2: Course selection (Filtered by cutoff) -->
-                    <div class="filter-group" style="width:100%;">
-                        <label class="filter-label">3. Select Course to Compare</label>
-                        <select class="filter-select" id="compareBranch" disabled onchange="updateCompareColleges()">
-                            <option value="">Enter cutoff first...</option>
-                        </select>
-                    </div>
-
-                    <!-- New Flow Step 3: College selection (Filtered by course and qualification) -->
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%;">
-                        <div class="filter-group">
-                            <label class="filter-label">4. College 1</label>
-                            <select class="filter-select" id="college1" disabled onchange="updateComparison()"></select>
-                        </div>
-                        <div class="filter-group">
-                            <label class="filter-label">5. College 2</label>
-                            <select class="filter-select" id="college2" disabled onchange="updateComparison()"></select>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%;">
+                            <div class="filter-group">
+                                <label class="filter-label">4. College 1</label>
+                                <select class="filter-select" id="college1" disabled
+                                    onchange="updateComparison()"></select>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">5. College 2</label>
+                                <select class="filter-select" id="college2" disabled
+                                    onchange="updateComparison()"></select>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Branch Comparison UI (New) -->
+                <div id="branchCompareUI" style="display:none;">
+                    <div class="filters" style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+                        <div class="filter-group">
+                            <label class="filter-label">Select Branch A</label>
+                            <select class="filter-select" id="branchCompareA" onchange="runBranchComparison()"></select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Select Branch B</label>
+                            <select class="filter-select" id="branchCompareB" onchange="runBranchComparison()"></select>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="comparisonResult"></div>
+                <!-- Final Decision Box -->
+                <div id="decisionHelper" style="display:none;"></div>
             </div>
         </section>
 
@@ -3370,7 +3655,30 @@
             </div>
         </div>
 
+        <div id="js-loading-indicator"
+            style="position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+            <h2>Loading Application...</h2>
+            <p>If this stays for more than 5 seconds, an error occurred.</p>
+            <div id="error-display"
+                style="color:red; margin-top:1rem; padding:1rem; border:1px solid red; max-width:80%; display:none;">
+            </div>
+        </div>
+
         <script>
+            // Global Error Handler - MUST BE FIRST
+            window.onerror = function (msg, url, line, col, error) {
+                const display = document.getElementById('error-display');
+                if (display) {
+                    display.style.display = 'block';
+                    display.innerHTML += `<strong>Error:</strong> ${msg}<br><small>${url}:${line}:${col}</small><br><br>`;
+                }
+                // alert("Critical Error: " + msg + "\nLine: " + line);
+                return false;
+            };
+        </script>
+
+        <script>
+
             // Global State
             let appState = {
                 cutoffData2024: [],
@@ -3383,6 +3691,12 @@
                 currentPageTab: 'dashboard',
                 previousTab: 'dashboard'
             };
+
+            // Remove loading indicator when done
+            function hideLoadingIndicator() {
+                const el = document.getElementById('js-loading-indicator');
+                if (el) el.style.display = 'none';
+            }
 
             const ITEMS_PER_PAGE = 25;
 
@@ -3418,35 +3732,37 @@
 
             // --- Data Loading ---
             async function loadData() {
-                const showLoading = () => {
-                    const tbl = document.getElementById('cutoffTable');
-                    if (tbl) tbl.innerHTML = `<tr><td colspan="10"><div class="spinner"></div></td></tr>`;
-                };
-                showLoading();
+                // Show loading state
+                const tbl = document.getElementById('cutoffTable');
+                if (tbl) tbl.innerHTML = '<tr><td colspan="10"><div class="text-center p-4">Loading Data...</div></td></tr>';
 
                 try {
                     const fetchJson = async (url) => {
                         const r = await fetch(url);
-                        if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
+                        if (!r.ok) throw new Error('HTTP error ' + r.status);
                         return r.json();
                     };
 
+                    // Load all data
                     const [cut24, cut23, courses, ranks] = await Promise.all([
-                        fetchJson('TNEA2024CutOff.json').catch(e => { console.error("2024 Cutoff Load Failed", e); return []; }),
-                        fetchJson('TNEA2023CutOff.json').catch(e => { console.error("2023 Cutoff Load Failed", e); return []; }),
-                        fetchJson('TNEAcourseInsights.json').catch(e => { console.error("Course Insights Load Failed", e); return {}; }),
-                        fetchJson('2024_TNEA_NIRF_Ranking.json').catch(e => { console.error("Rankings Load Failed", e); return []; })
+                        fetchJson('TNEA2024CutOff.json').catch(e => []),
+                        fetchJson('TNEA2023CutOff.json').catch(e => []),
+                        fetchJson('TNEAcourseInsights.json').catch(e => ({})),
+                        fetchJson('2024_TNEA_NIRF_Ranking.json').catch(e => [])
                     ]);
 
-                    appState.cutoffData2024 = cut24 && cut24.length ? cut24 : generateSampleData();
+                    // Populate State
+                    appState.cutoffData2024 = (cut24 && cut24.length) ? cut24 : generateSampleData();
                     appState.cutoffData2023 = cut23 || [];
                     appState.courseInsights = courses ? Object.entries(courses).map(([name, info]) => ({ name: name.trim(), ...info })) : [];
                     appState.rankings = ranks || [];
-
                     appState.currentData = appState.cutoffData2024;
 
+                    // Render
                     renderAll();
+                    hideLoadingIndicator();
 
+                    // Optional Compare pre-fill
                     if (appState.cutoffData2024.length > 0) {
                         try {
                             const el = document.getElementById('compareCutoff');
@@ -3454,15 +3770,16 @@
                                 el.value = 180;
                                 updateCompareBranches();
                             }
-                        } catch (e) { console.warn("Compare update failed", e); }
+                        } catch (e) { console.warn("Compare auto-fill error", e); }
                     }
 
                 } catch (e) {
-                    console.error("Initialization Failed", e);
-                    alert("Initialization Failed: " + e.message);
+                    console.error("Init Error", e);
+                    alert("Init Error: " + e.message);
                     appState.cutoffData2024 = generateSampleData();
                     appState.currentData = appState.cutoffData2024;
                     renderAll();
+                    hideLoadingIndicator();
                 }
             }
 
@@ -3768,6 +4085,152 @@
                     </div>
                     `;
                 }).join('') || '<p style="text-align:center; grid-column:1/-1; padding:3rem; color:var(--text-muted);">No courses found matching your search.</p>';
+            }
+
+
+            function switchCompareMode(mode) {
+                // Update tabs
+                document.querySelectorAll('.compare-toggle-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.innerText.toLowerCase().includes(mode)) btn.classList.add('active');
+                });
+
+                // Update UI Containers
+                document.getElementById('collegeCompareUI').style.display = mode === 'college' ? 'block' : 'none';
+                document.getElementById('branchCompareUI').style.display = mode === 'branch' ? 'block' : 'none';
+
+                // Reset Results
+                document.getElementById('comparisonResult').innerHTML = '';
+                document.getElementById('decisionHelper').style.display = 'none';
+
+                if (mode === 'branch') {
+                    populateBranchCompareSelects();
+                }
+            }
+
+            function populateBranchCompareSelects() {
+                const s1 = document.getElementById('branchCompareA');
+                const s2 = document.getElementById('branchCompareB');
+
+                const sortedCourses = [...appState.courseInsights].sort((a, b) => a.name.localeCompare(b.name));
+                const options = '<option value="">-- Select Branch --</option>' +
+                    sortedCourses.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+
+                s1.innerHTML = options;
+                s2.innerHTML = options;
+            }
+
+            function runBranchComparison() {
+                const b1Name = document.getElementById('branchCompareA').value;
+                const b2Name = document.getElementById('branchCompareB').value;
+                const resultDiv = document.getElementById('comparisonResult');
+                const helperDiv = document.getElementById('decisionHelper');
+
+                if (!b1Name || !b2Name) {
+                    resultDiv.innerHTML = '';
+                    helperDiv.style.display = 'none';
+                    return;
+                }
+
+                const b1 = appState.courseInsights.find(c => c.name === b1Name);
+                const b2 = appState.courseInsights.find(c => c.name === b2Name);
+
+                // Find advisor mapping for extra career details
+                const m1 = Object.values(branchMapping).find(m => b1Name.toLowerCase().includes(m.name.split(' ')[0].toLowerCase())) || {};
+                const m2 = Object.values(branchMapping).find(m => b2Name.toLowerCase().includes(m.name.split(' ')[0].toLowerCase())) || {};
+
+                const renderCard = (data, mapping, isLeft) => {
+                    const complexity = parseInt(data['Course Complexity']) || 7;
+                    const entrySalary = mapping.pros?.find(p => p.includes('salary')) ? 'High' : (data.Salary?.Entry || 'Standard');
+
+                    return `
+                    <div class="branch-compare-card">
+                        ${!isLeft ? '<div class="compare-v-badge">VS</div>' : ''}
+                        <h3 style="color:var(--primary); margin-bottom:1rem; font-size:1.4rem;">${data.name}</h3>
+                        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1.5rem; line-height:1.5;">${data['Course Description'] || mapping.desc || 'No description'}</p>
+                        
+                        <div class="comparison-metrics">
+                            <div class="comparison-metric-row">
+                                <span class="metric-label">📊 Market Demand</span>
+                                <span class="metric-value">${data['Market Demand'] || 'High'}</span>
+                            </div>
+                            <div class="comparison-metric-row">
+                                <span class="metric-label">💰 Entry Salary</span>
+                                <span class="metric-value">₹ ${entrySalary}</span>
+                            </div>
+                            <div class="comparison-metric-row">
+                                <span class="metric-label">🧠 Complexity</span>
+                                <span class="metric-value">${complexity}/10</span>
+                            </div>
+                            <div class="comparison-metric-row">
+                                <span class="metric-label">🔭 Future Trend</span>
+                                <span class="metric-value">${(data['Industry Trends'] || []).slice(0, 2).join(', ') || mapping.future || 'Growing'}</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:1.5rem;">
+                            <span class="metric-label">✅ Best for you if:</span>
+                            <p style="font-size:0.85rem; color:var(--text);">${mapping.suitability || 'You are interested in this field.'}</p>
+                        </div>
+                    </div>
+                `;
+                };
+
+                resultDiv.innerHTML = `
+                    <div class="branch-comparison-grid">
+                        ${renderCard(b1, m1, true)}
+                        ${renderCard(b2, m2, false)}
+                    </div>
+                `;
+
+                // Render Advisor Helper
+                helperDiv.style.display = 'block';
+                renderDecisionAdvisor(b1, b2, m1, m2);
+            }
+
+            function renderDecisionAdvisor(b1, b2, m1, m2) {
+                const helper = document.getElementById('decisionHelper');
+
+                // Simple Logic for recommendations
+                const pay1 = parseInt((b1.Salary?.Entry || '0').replace(/[^0-9]/g, '')) || 4;
+                const pay2 = parseInt((b2.Salary?.Entry || '0').replace(/[^0-9]/g, '')) || 4;
+                const comp1 = parseInt(b1['Course Complexity']) || 7;
+                const comp2 = parseInt(b2['Course Complexity']) || 7;
+
+                let recommendation = "";
+                let roiBranch = pay1 / comp1 > pay2 / comp2 ? b1.name : b2.name;
+                let demandBranch = b1['Market Demand'].toLowerCase().includes('very high') ? b1.name : (b2['Market Demand'].toLowerCase().includes('very high') ? b2.name : "Both");
+
+                if (pay1 > pay2 + 1) {
+                    recommendation = `If financial ROI is your top priority, **${b1.name}** generally offers a stronger starting package. `;
+                } else if (pay2 > pay1 + 1) {
+                    recommendation = `If financial ROI is your top priority, **${b2.name}** generally offers a stronger starting package. `;
+                } else {
+                    recommendation = `Both branches have similar pay scales. Your choice should depend on whether you prefer **${m1.tags?.join('/') || 'this field'}** or **${m2.tags?.join('/') || 'that field'}**. `;
+                }
+
+                if (comp1 > comp2 + 1) {
+                    recommendation += `Note that **${b1.name}** is significantly more academic or rigorous. `;
+                }
+
+                helper.innerHTML = `
+                    <div class="decision-helper-box">
+                        <div class="advisor-title">
+                            <div class="advisor-avatar">👩‍🏫</div>
+                            <span>Career Advisor's Final Take</span>
+                        </div>
+                        <div class="advisor-content">
+                            <p>${recommendation}</p>
+                            <div style="display:flex; gap:1rem; margin-top:1.5rem; flex-wrap:wrap;">
+                                <div class="roi-badge">🚀 Best ROI: ${roiBranch}</div>
+                                <div class="roi-badge" style="background:rgba(37,99,235,0.1); color:var(--primary);">📈 Top Demand: ${demandBranch}</div>
+                            </div>
+                            <p style="margin-top:1rem; font-size:0.9rem; color:var(--text-muted);">
+                                <strong>Advisor Tip:</strong> Don't just follow the money. Choose **${b1.name}** if you enjoy ${m1.suitability?.toLowerCase() || 'problem solving'}. Choose **${b2.name}** if you prefer ${m2.suitability?.toLowerCase() || 'technical challenges'}.
+                            </p>
+                        </div>
+                    </div>
+                `;
             }
 
 
@@ -4318,45 +4781,29 @@
                     favBtn.innerHTML = isFav ? '❤️ Branch Saved' : '🤍 Save Branch to Favorites';
                     favBtn.onclick = () => toggleBranchFavorite(insight.name);
 
-                    content.innerHTML = `
-                    <div class="modal-info-header">
-                        <div class="modal-info-title">${insight.name}</div>
-                        <div class="tag" style="background:rgba(37,99,235,0.1); color:var(--primary); border:none;">${insight['Market Demand']} Demand</div>
-                    </div>
-                    
-                    <div class="info-section">
-                        <div class="info-label">Description</div>
-                        <div class="info-content">${insight['Course Description']}</div>
-                    </div>
-                    
-                    <div class="info-section">
-                        <div class="info-label">Key Features & Specialties</div>
-                        <ul class="feature-list">${featuresHtml}</ul>
-                    </div>
-                    
-                    <div class="info-section">
+
                     // Find Related Courses (Simple logic: courses with same first word or "Engineering")
                     const relatedCourses = appState.courseInsights
                         .filter(ci => ci.name !== insight.name && (ci.name.includes(insight.name.split(' ')[0]) || (insight.name.includes('Eng') && ci.name.includes('Eng'))))
                         .slice(0, 3); // Take top 3
 
-                    const relatedHtml = relatedCourses.length > 0 
-                        ? `< div class="info-section" >
+                    const relatedHtml = relatedCourses.length > 0
+                        ? `<div class="info-section" >
                             <div class="info-label">Related Courses</div>
                             <div class="related-courses-list" style="display:flex; gap:0.5rem; flex-wrap:wrap;">
                                 ${relatedCourses.map(rc => `<span class="tag" style="cursor:pointer; background:var(--surface); border:1px solid var(--border);" onclick="showCourseDetails('${rc.name}')">${rc.name}</span>`).join('')}
                             </div>
-                           </div > ` 
+                           </div> `
                         : '';
 
                     const roles = insight['Career Roles'] || insight['Job Positions'] || ['Various engineering roles in industry.'];
                     const rolesText = Array.isArray(roles) ? roles.join(', ') : roles;
 
                     content.innerHTML = `
-                        < div class="modal-info-header" >
+                        <div class="modal-info-header" >
                         <div class="modal-info-title">${insight.name}</div>
                         <div class="tag" style="background:rgba(37,99,235,0.1); color:var(--primary); border:none;">${insight['Market Demand']} Demand</div>
-                    </div >
+                    </div>
                     
                     <div class="info-section">
                         <div class="info-label">Description</div>
@@ -4380,7 +4827,7 @@
                         </div>
                     </div>
 
-                    ${ relatedHtml }
+                    ${relatedHtml}
                     `;
                 }
 
@@ -4457,19 +4904,19 @@
 
                 if (matches.length === 0) {
                     resultsDiv.innerHTML = `
-                        < div class="no-results-msg" >
+                        <div class="no-results-msg" >
                 <div class="emoji">😔</div>
                 <h3>No matching colleges found</h3>
                 <p>Your cutoff mark (${cutoff.toFixed(2)}) for ${category} category didn't match any colleges in our 2024 data.</p>
                 <p>Try selecting different branches or check if your marks are entered correctly.</p>
-            </div >
+            </div>
                         `;
                     predNextStep(4);
                     return;
                 }
 
                 const renderSuggestionCard = (item) => {
-                    const favKey = `${ item.con }|| ${ item.brc } `;
+                    const favKey = `${item.con}|| ${item.brc} `;
                     const isSaved = isFavorite(favKey);
                     const safeItem = JSON.stringify({
                         con: item.con,
@@ -4484,7 +4931,7 @@
                         ST: item.ST || ''
                     }).replace(/"/g, '&quot;');
                     return `
-                        < div class="suggestion-card" >
+                        <div class="suggestion-card" >
             <div class="suggestion-info">
                 <div class="college-name">${item.con}</div>
                 <div class="branch-name">${item.brc} - ${item.brn}</div>
@@ -4493,23 +4940,23 @@
                 <div class="meta-badge cutoff-badge">${item[category]}</div>
                 ${item.nirfRank ? `<div class="meta-badge rank-badge-tag">#${item.nirfRank}</div>` : ''}
                 <button class="fav-btn ${isSaved ? 'saved' : ''}" onclick="toggleFavoriteFromPredictor('${favKey.replace(/'/g, "\\'")}', '${safeItem}', this)" title="${isSaved ? 'Remove from favorites' : 'Save to favorites'}">${isSaved ? '❤️' : '🤍'}</button>
-            </div >
-        </div >
+            </div>
+        </div>
                         `};
 
                 const renderTier = (title, emoji, tierClass, items, limit) => {
                     if (items.length === 0) return '';
                     const shown = items.slice(0, limit);
                     return `
-                        < div class="results-section-title" > ${ emoji } ${ title } <span style="font-size:0.8rem;color:var(--text-muted);font-weight:400">(${items.length} options)</span></div >
+                        <div class="results-section-title" > ${emoji} ${title} <span style="font-size:0.8rem;color:var(--text-muted);font-weight:400">(${items.length} options)</span></div>
                             <div class="tier-label ${tierClass}">${tierClass === 'dream' ? 'Competitive - margin < 5' : tierClass === 'reach' ? 'Good Chance - margin 5-20' : 'Safe - margin > 20'}</div>
-            ${ shown.map(renderSuggestionCard).join('') }
-            ${ items.length > limit ? `<p style="text-align:center;color:var(--text-muted);font-size:0.85rem;margin:0.5rem 0;">... and ${items.length - limit} more</p>` : '' }
+            ${shown.map(renderSuggestionCard).join('')}
+            ${items.length > limit ? `<p style="text-align:center;color:var(--text-muted);font-size:0.85rem;margin:0.5rem 0;">... and ${items.length - limit} more</p>` : ''}
                     `;
                 };
 
                 const summaryHtml = `
-                        < div class="results-summary" >
+                        <div class="results-summary" >
             <div class="result-stat">
                 <div class="result-num">${matches.length}</div>
                 <div class="result-label">Total Options</div>
@@ -4522,7 +4969,7 @@
                 <div class="result-num">${uniqueBranches}</div>
                 <div class="result-label">Branches</div>
             </div>
-        </div >
+        </div>
                         `;
 
                 resultsDiv.innerHTML = summaryHtml +
@@ -4559,20 +5006,20 @@
                 if (authState.isLoggedIn && authState.user) {
                     const initials = authState.user.name ? authState.user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U';
                     area.innerHTML = `
-                        < div class="user-area" >
+                        <div class="user-area">
                         <div class="user-avatar">${initials}</div>
                         <span class="user-name">${authState.user.name || authState.user.username}</span>
                         <button class="logout-btn" onclick="handleLogout()">Logout</button>
-                    </div >
+                    </div>
                         `;
 
                     // Update Hero Greeting
                     const heroG = document.getElementById('heroGreetingContainer');
                     if (heroG) {
-                        heroG.innerHTML = `< div class="hero-greeting" > Welcome, ${ authState.user.name || authState.user.username } 👋</div > `;
+                        heroG.innerHTML = `<div class="hero-greeting">Welcome, ${authState.user.name || authState.user.username} 👋</div>`;
                     }
                 } else {
-                    area.innerHTML = `< button class="login-nav-btn" onclick = "showLoginModal()" >🔐 Login</button > `;
+                    area.innerHTML = `<button class="login-nav-btn" onclick="showLoginModal()">🔐 Login</button>`;
                     const heroG = document.getElementById('heroGreetingContainer');
                     if (heroG) heroG.innerHTML = '';
                 }
@@ -4645,7 +5092,7 @@
                 if (authState.isRegisterMode) {
                     // REGISTER
                     if (users[username]) {
-                        error.innerHTML = `Username already exists. < a href = "#" onclick = "toggleLoginMode()" style = "color:inherit; text-decoration:underline;" > Click here to Login instead.</a > `;
+                        error.innerHTML = `Username already exists. <a href = "#" onclick = "toggleLoginMode()" style = "color:inherit; text-decoration:underline;" > Click here to Login instead.</a> `;
                         error.style.display = 'block';
                         return;
                     }
@@ -4659,7 +5106,7 @@
                 } else {
                     // LOGIN
                     if (!users[username]) {
-                        error.innerHTML = `User not found. < a href = "#" onclick = "toggleLoginMode()" style = "color:inherit; text-decoration:underline;" > Click here to Create an Account.</a > `;
+                        error.innerHTML = `User not found. <a href = "#" onclick = "toggleLoginMode()" style = "color:inherit; text-decoration:underline;" > Click here to Create an Account.</a> `;
                         error.style.display = 'block';
                         return;
                     }
@@ -4716,7 +5163,7 @@
                 updateFavBadge();
                 renderCutoffTable();
 
-                alert(`Successfully signed in with Google as ${ user.name } !`);
+                alert(`Successfully signed in with Google as ${user.name} !`);
             }
 
             function handleForgotPassword() {
@@ -4738,7 +5185,7 @@
 
                 // In a real app, you'd send an email. Here we just show a "reset" alert
                 // or tell them their password for this local-only demo.
-                alert(`[Local Demo Only] Password for ${ username } is: ${ users[username].password } \n\nIn a live production app, a reset link would be sent to your email.`);
+                alert(`[Local Demo Only] Password for ${username} is: ${users[username].password} \n\nIn a live production app, a reset link would be sent to your email.`);
             }
 
             // ===== Favorites System =====
@@ -4875,12 +5322,12 @@
 
                 if (!authState.isLoggedIn) {
                     container.innerHTML = `
-                        < div class="fav-empty" >
+                        <div class="fav-empty" >
                         <div class="fav-empty-icon">🔐</div>
                         <h3>Login Required</h3>
                         <p style="margin-bottom:1rem;">Please login to view and save your favorite colleges.</p>
                         <button class="btn-primary" onclick="showLoginModal()" style="display:inline-block;">Login / Register</button>
-                    </div >
+                    </div>
                         `;
                     return;
                 }
@@ -4890,11 +5337,11 @@
 
                 if (favs.length === 0 && branchFavs.length === 0) {
                     container.innerHTML = `
-                        < div class="fav-empty" >
+                        <div class="fav-empty" >
                         <div class="fav-empty-icon">💔</div>
                         <h3>No favorites yet</h3>
                         <p>Go to Search Cutoffs or Course Predictor and click the ❤️ button to save colleges or courses here.</p>
-                    </div >
+                    </div>
                         `;
                     return;
                 }
@@ -4902,11 +5349,11 @@
                 let html = '';
                 if (branchFavs.length > 0) {
                     html += `
-                        < h3 style = "margin:2rem 0 1rem; color:var(--primary);" >⭐️ Favorite Courses</h3 >
+                        <h3 style = "margin:2rem 0 1rem; color:var(--primary);" >⭐️ Favorite Courses</h3>
                             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1rem; margin-bottom:2rem;">
                                 ${branchFavs.map(name => {
-                                    const insight = appState.courseInsights.find(ci => ci.name === name);
-                                    return `
+                        const insight = appState.courseInsights.find(ci => ci.name === name);
+                        return `
                             <div class="fav-card" style="border-left:4px solid var(--accent);">
                                 <div class="fav-info">
                                     <div class="fav-college" style="font-size:1.1rem;">${name}</div>
@@ -4915,17 +5362,16 @@
                                 <button class="remove-fav-btn" onclick="toggleBranchFavorite('${name}')">🗑️ Remove</button>
                             </div>
                             `;
-                                }).join('')}
+                    }).join('')}
                             </div>
                     `;
                 }
 
                 if (favs.length > 0) {
                     html += `
-                        < h3 style = "margin:2rem 0 1rem; color:var(--primary);" >📍 Favorite Colleges</h3 >
+                        <h3 style = "margin:2rem 0 1rem; color:var(--primary);" >📍 Favorite Colleges</h3>
                             <p style="color:var(--text-muted); margin-bottom:1rem;">You have <strong style="color:var(--primary)">${favs.length}</strong> saved college(s)</p>
-                    ${
-                        favs.map(f => `
+                    ${favs.map(f => `
                         <div class="fav-card">
                             <div class="fav-info">
                                 <div class="fav-college">${f.con}</div>
@@ -4941,7 +5387,7 @@
                             <button class="remove-fav-btn" onclick="removeFavorite('${f.key.replace(/'/g, "\\'")}')">🗑️ Remove</button>
                         </div>
                     `).join('')
-                    }
+                        }
                     `;
                 }
                 container.innerHTML = html;
@@ -5192,8 +5638,164 @@
                     group: 'math',
                     marks: { math: 0, physics: 0, chem: 0, cs: 0, overall: 0 }
                 },
+                quizIndex: 0,
+                quizScores: {},
+                quizRef: [], // Store personalized strings for results
                 history: [] // Stack of screen IDs for back navigation
             };
+
+            const assessmentQuestions = [
+                {
+                    text: "When solving a problem, you prefer:",
+                    desc: "Choose the method that feels most natural to you.",
+                    options: [
+                        { text: "Writing code or logical steps", ref: "you prefer writing code and logic", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Understanding how physical parts work", ref: "you enjoy mechanical systems", score: { mech: 15, auto: 12, prod: 10 } },
+                        { text: "Analyzing data and patterns", ref: "you are a data thinker", score: { ai: 15, math: 12, it: 10 } },
+                        { text: "Designing structures or layouts", ref: "you have a designer's eye", score: { civil: 15, fashion: 12, env: 10 } }
+                    ]
+                },
+                {
+                    text: "Which activity sounds more interesting to you?",
+                    desc: "Think about how you'd like to spend your workday.",
+                    options: [
+                        { text: "Building a mobile app", ref: "you're interested in app development", score: { cs: 15, it: 15, ai: 10 } },
+                        { text: "Working with engines or machines", ref: "you love engines and machinery", score: { auto: 15, mech: 15, aero: 12 } },
+                        { text: "Managing construction projects", ref: "you want to manage big structures", score: { civil: 15, prod: 12, env: 10 } },
+                        { text: "Working with electronic devices", ref: "you're fascinated by electronics", score: { ec: 15, ee: 15, robot: 12 } }
+                    ]
+                },
+                {
+                    text: "What type of YouTube videos do you usually watch?",
+                    desc: "What catches your attention during your free time?",
+                    options: [
+                        { text: "Tech & software", ref: "you keep up with software tech", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Mechanical inventions", ref: "you're into mechanical inventions", score: { mech: 15, auto: 12, prod: 10 } },
+                        { text: "Infrastructure / buildings", ref: "you're curious about infrastructure", score: { civil: 15, env: 12, agri: 10 } },
+                        { text: "AI & futuristic tech", ref: "you're excited by AI and the future", score: { ai: 15, robot: 15, ec: 10 } }
+                    ]
+                },
+                {
+                    text: "In school, which type of practical classes did you enjoy more?",
+                    desc: "Recall your favorite hands-on memories.",
+                    options: [
+                        { text: "Computer lab", ref: "you were a computer lab star", score: { cs: 15, it: 15, math: 10 } },
+                        { text: "Physics lab", ref: "you excelled in the physics lab", score: { ee: 15, ec: 15, mech: 10 } },
+                        { text: "Workshop", ref: "you loved the workshop sessions", score: { mech: 15, prod: 15, auto: 10 } },
+                        { text: "Drawing / design", ref: "you enjoyed design and drafting", score: { civil: 15, fashion: 12, textile: 12 } }
+                    ]
+                },
+                {
+                    text: "You prefer a job that:",
+                    desc: "Envision your ideal future work environment.",
+                    options: [
+                        { text: "Allows remote or IT-based work", ref: "you value flexible IT roles", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Involves site visits or field work", ref: "you prefer being out in the field", score: { civil: 15, agri: 12, env: 12 } },
+                        { text: "Requires hands-on machinery work", ref: "you're a hands-on machinery person", score: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Involves analysis and problem-solving", ref: "you thrive on deep analysis", score: { ai: 15, math: 15, biomed: 10 } }
+                    ]
+                },
+                {
+                    text: "When learning something new, you:",
+                    desc: "How do you naturally process information?",
+                    options: [
+                        { text: "Try coding it", ref: "you learn through code", score: { cs: 15, it: 12, ai: 12 } },
+                        { text: "Try assembling it", ref: "you learn by building things", score: { mech: 15, auto: 12, robot: 12 } },
+                        { text: "Study its structure", ref: "you focus on structural logic", score: { civil: 15, prod: 12, architecture: 10 } },
+                        { text: "Research deeply before applying", ref: "you are a deep researcher", score: { ai: 15, chem: 12, biomed: 12 } }
+                    ]
+                },
+                {
+                    text: "Which environment suits you more?",
+                    desc: "Where do you feel most productive?",
+                    options: [
+                        { text: "Office with computers", ref: "you're at home in a tech office", score: { cs: 15, it: 15, cyber: 10 } },
+                        { text: "Industrial setting", ref: "you thrive in industrial plants", score: { prod: 15, mech: 12, auto: 12 } },
+                        { text: "Construction site", ref: "the construction site is your place", score: { civil: 15, architecture: 12, env: 10 } },
+                        { text: "Research lab", ref: "a research lab sparks your curiosity", score: { ai: 15, chem: 15, biomed: 15 } }
+                    ]
+                },
+                {
+                    text: "What gives you more satisfaction?",
+                    desc: "What makes you feel truly accomplished?",
+                    options: [
+                        { text: "Solving logical puzzles", ref: "you love logical puzzles", score: { math: 15, cs: 12, ai: 12 } },
+                        { text: "Fixing mechanical issues", ref: "you're a pro at mechanical fixes", score: { mech: 15, auto: 15, ee: 10 } },
+                        { text: "Designing physical models", ref: "you're great at physical design", score: { civil: 15, architecture: 15, fashion: 10 } },
+                        { text: "Optimizing systems", ref: "you're a master of efficiency", score: { prod: 15, it: 12, math: 10 } }
+                    ]
+                },
+                {
+                    text: "Which skill do you feel strongest in?",
+                    desc: "Your core natural talent.",
+                    options: [
+                        { text: "Logical thinking", ref: "you have sharp logical skills", score: { cs: 15, it: 12, cyber: 12 } },
+                        { text: "Physical/mechanical understanding", ref: "you understand mechanics intuitively", score: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Visualization & design", ref: "you can see designs in your head", score: { civil: 15, fashion: 15, textile: 12 } },
+                        { text: "Analytical reasoning", ref: "your analytical skills are top-notch", score: { ai: 15, math: 15, chem: 10 } }
+                    ]
+                },
+                {
+                    text: "If given a project, you would choose:",
+                    desc: "Your dream assignment.",
+                    options: [
+                        { text: "Develop a website", ref: "you're a web development fan", score: { it: 15, cs: 12, cyber: 10 } },
+                        { text: "Design a machine", ref: "you dream of designing machines", score: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Plan a building", ref: "you're a natural architect/builder", score: { civil: 15, env: 12, agri: 10 } },
+                        { text: "Create a smart AI solution", ref: "you're driven by intelligent AI", score: { ai: 15, cs: 12, robot: 10 } }
+                    ]
+                },
+                {
+                    text: "You feel more confident working with:",
+                    desc: "The tools of your trade.",
+                    options: [
+                        { text: "Algorithms", ref: "algorithms are your language", score: { cs: 15, ai: 15, math: 12 } },
+                        { text: "Tools & equipment", ref: "you're confident with heavy tools", score: { mech: 15, auto: 12, prod: 12 } },
+                        { text: "Blueprints", ref: "you speak the language of blueprints", score: { civil: 15, architecture: 15, env: 10 } },
+                        { text: "Circuits", ref: "electronic circuits are your world", score: { ec: 15, ee: 15, robot: 12 } }
+                    ]
+                },
+                {
+                    text: "What kind of problems excite you?",
+                    desc: "Challenges that keep you awake.",
+                    options: [
+                        { text: "Software bugs", ref: "you're a relentless bug hunter", score: { cs: 15, cyber: 15, it: 12 } },
+                        { text: "Machine breakdowns", ref: "you're the go-to person for breakdowns", score: { mech: 15, auto: 15, ee: 10 } },
+                        { text: "Structural design challenges", ref: "you love building challenges", score: { civil: 15, environment: 12, agri: 10 } },
+                        { text: "Data-related issues", ref: "you're a data problem-solver", score: { ai: 15, it: 15, math: 12 } }
+                    ]
+                },
+                {
+                    text: "Your ideal workplace looks like:",
+                    desc: "Where you see yourself in 5 years.",
+                    options: [
+                        { text: "Tech company", ref: "you belong in a fast-paced tech firm", score: { cs: 15, it: 15, ai: 12 } },
+                        { text: "Manufacturing plant", ref: "production lines excite you", score: { prod: 15, mech: 12, auto: 10 } },
+                        { text: "Construction company", ref: "you want to build massive landmarks", score: { civil: 15, env: 10, architecture: 12 } },
+                        { text: "Research & innovation center", ref: "you are a pioneer of innovation", score: { ai: 15, biomed: 15, chem: 12 } }
+                    ]
+                },
+                {
+                    text: "You prefer learning through:",
+                    desc: "Your favorite way to grow.",
+                    options: [
+                        { text: "Coding practice", ref: "you grow through coding", score: { cs: 15, it: 15, cyber: 10 } },
+                        { text: "Physical experiments", ref: "you value physical experimentation", score: { mech: 15, ee: 12, ec: 12 } },
+                        { text: "Design drafting", ref: "you're a master of design drafts", score: { civil: 15, architecture: 15, fashion: 12 } },
+                        { text: "Case studies & analysis", ref: "you learn from deep real-world cases", score: { prod: 15, ai: 12, biomed: 10 } }
+                    ]
+                },
+                {
+                    text: "Which achievement would make you proud?",
+                    desc: "The ultimate milestone.",
+                    options: [
+                        { text: "Launching a tech product", ref: "launching a tech product is your goal", score: { it: 15, cs: 15, ai: 12 } },
+                        { text: "Designing a powerful engine", ref: "you want to design an iconic engine", score: { auto: 15, mech: 15, aero: 12 } },
+                        { text: "Constructing a landmark building", ref: "you want to build a world landmark", score: { civil: 15, architecture: 15, environment: 10 } },
+                        { text: "Developing an intelligent system", ref: "the gift of intelligence is your aim", score: { ai: 15, cyber: 15, robot: 12 } }
+                    ]
+                }
+            ];
 
 
             const relatedCoursesData = {
@@ -5261,7 +5863,7 @@
 
                 // Update indicators
                 const indicators = document.querySelectorAll('.step-indicator');
-                const stepMap = { 'academicProfile': 0, 'goalSelection': 1, 'modeSelection': 2, 'branchSelector': 2, 'resultContainer': 3 };
+                const stepMap = { 'academicProfile': 0, 'goalSelection': 1, 'modeSelection': 2, 'interestQuiz': 2, 'branchSelector': 2, 'resultContainer': 3 };
                 const currentStep = stepMap[currentScreen];
 
                 indicators.forEach((ind, idx) => {
@@ -5271,7 +5873,7 @@
             }
 
             function navigateToAssessmentScreen(screenId) {
-                const screens = ['academicProfile', 'goalSelection', 'modeSelection', 'branchSelector', 'resultContainer'];
+                const screens = ['academicProfile', 'goalSelection', 'modeSelection', 'interestQuiz', 'branchSelector', 'resultContainer'];
                 screens.forEach(s => {
                     const el = document.getElementById(s);
                     if (el) el.style.display = s === screenId ? 'block' : 'none';
@@ -5327,7 +5929,7 @@
                     const item = document.createElement('div');
                     item.className = 'goal-item';
                     item.innerHTML = `
-                        < div class="goal-item-icon" > ${ getGoalIcon(key) }</div >
+                        <div class="goal-item-icon" > ${getGoalIcon(key)}</div>
                             <div class="goal-item-name">${branchMapping[key].name}</div>
                     `;
                     item.onclick = () => selectGoal(key);
@@ -5360,8 +5962,73 @@
                 currentAssessment.mode = mode;
                 if (mode === 'comparison') {
                     showBranchSelector();
+                } else if (mode === 'discovery') {
+                    startInterestQuiz();
                 } else {
                     showAssessmentResults();
+                }
+            }
+
+            function startInterestQuiz() {
+                currentAssessment.quizIndex = 0;
+                currentAssessment.quizScores = {};
+                currentAssessment.quizRef = [];
+                for (let k in branchMapping) currentAssessment.quizScores[k] = 0;
+                renderInterestQuiz();
+                navigateToAssessmentScreen('interestQuiz');
+            }
+
+            function renderInterestQuiz() {
+                const q = assessmentQuestions[currentAssessment.quizIndex];
+                const total = assessmentQuestions.length;
+                const progress = ((currentAssessment.quizIndex) / total) * 100;
+
+                document.getElementById('quizStepText').innerText = `Question ${currentAssessment.quizIndex + 1} of ${total}`;
+                document.getElementById('quizPercentText').innerText = `${Math.round(progress)}% Complete`;
+                document.getElementById('quizProgressBar').style.width = `${progress}%`;
+                document.getElementById('quizQuestion').innerText = q.text;
+                document.getElementById('quizDesc').innerText = q.desc;
+
+                const optionsCont = document.getElementById('quizOptions');
+                optionsCont.innerHTML = '';
+
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('div');
+                    btn.className = 'quiz-option';
+                    btn.innerHTML = `
+                        <h5>${opt.text}</h5>
+                        <p>Select this if it's most like you</p>
+                    `;
+                    btn.onclick = () => selectQuizOption(idx);
+                    optionsCont.appendChild(btn);
+                });
+            }
+
+            function selectQuizOption(idx) {
+                const q = assessmentQuestions[currentAssessment.quizIndex];
+                const opt = q.options[idx];
+
+                // Accumulate scores
+                for (let k in opt.score) {
+                    if (currentAssessment.quizScores[k] !== undefined) {
+                        currentAssessment.quizScores[k] += opt.score[k];
+                    }
+                }
+
+                // Store preference for result personalization
+                if (opt.ref) currentAssessment.quizRef.push(opt.ref);
+
+                currentAssessment.quizIndex++;
+
+                if (currentAssessment.quizIndex < assessmentQuestions.length) {
+                    renderInterestQuiz();
+                } else {
+                    // Quiz finished!
+                    document.getElementById('quizProgressBar').style.width = `100%`;
+                    document.getElementById('quizPercentText').innerText = `100% Complete`;
+                    setTimeout(() => {
+                        showAssessmentResults();
+                    }, 500);
                 }
             }
 
@@ -5464,6 +6131,17 @@
                 scores.textile += marks.math * 0.3 + marks.physics * 0.3 + 40;
                 scores.env += marks.chem * 0.4 + marks.physics * 0.4 + marks.math * 0.2;
 
+                // Add Interest Scores (Weighted integration)
+                if (mode === 'discovery' && currentAssessment.quizScores) {
+                    for (let k in currentAssessment.quizScores) {
+                        if (scores[k] !== undefined) {
+                            // Boost existing scores with interest data
+                            scores[k] = (scores[k] * 0.6) + (currentAssessment.quizScores[k] * 0.4);
+                        } else {
+                            scores[k] = currentAssessment.quizScores[k] * 0.4;
+                        }
+                    }
+                }
 
                 let bestKey = goal || 'cs';
                 if (!goal) {
@@ -5480,7 +6158,7 @@
                 }
 
                 const rec = branchMapping[bestKey] || branchMapping.cs;
-                document.getElementById('resultBranch').innerText = goal ? `Goal Analysis: ${ rec.name } ` : rec.name;
+                document.getElementById('resultBranch').innerText = goal ? `Goal Analysis: ${rec.name} ` : rec.name;
 
 
                 const topSubject = Object.entries({ Math: marks.math, Physics: marks.physics, Chemistry: marks.chem, CS: marks.cs })
@@ -5490,8 +6168,15 @@
                 const userName = authState.user ? (authState.user.name || authState.user.username) : "Student";
                 const resultDesc = document.getElementById('resultDesc');
 
+                // Construct a personalized advisor message
+                let personaMsg = "";
+                if (currentAssessment.quizRef.length > 0) {
+                    const sampleRefs = currentAssessment.quizRef.slice(0, 3);
+                    personaMsg = `Given that ${sampleRefs.join(', and ')}, `;
+                }
+
                 resultDesc.innerHTML = `
-                        < div class="advisor-card" >
+                        <div class="advisor-card" >
                         <div class="advisor-avatar-container">
                             <div class="advisor-avatar">👩‍🏫</div>
                         </div>
@@ -5499,11 +6184,12 @@
                             <h4>Career Guidance Advisor</h4>
                             <div class="advisor-greeting">"Hello, ${userName}! I've analyzed your path..."</div>
                             <p class="advisor-text">
-                                ${goal ? `I see you are interested in ${rec.name}. Here is a simple take on why this is a good choice:` :
-                        `Based on your marks, I think ${rec.name} is a great match. Here's why:`}
+                                ${personaMsg} I strongly recommend the <strong>${rec.name}</strong> path for you.
+                                ${goal ? `It's a perfect alignment with your stated interest.` :
+                        `Based on our analysis, this field best matches your unique profile of skills and passions.`}
                             </p>
                         </div>
-                    </div >
+                    </div>
 
                     <div class="course-detail-grid">
                         <div class="detail-card" onclick="toggleDetailCard(this)">
@@ -5567,10 +6253,10 @@
                         const item = document.createElement('div');
                         item.className = 'breakdown-item';
                         item.innerHTML = `
-                        < div class="breakdown-header" >
+                        <div class="breakdown-header" >
                                 <span class="breakdown-label">${branchMapping[key].name}</span>
                                 <span class="breakdown-percentage">${percentage}% Alignment</span>
-                            </div >
+                            </div>
                         <div class="breakdown-bar-bg">
                             <div class="breakdown-bar-fill" style="width: ${percentage}%"></div>
                         </div>
@@ -5589,7 +6275,7 @@
                 tips.forEach(t => {
                     const div = document.createElement('div');
                     div.className = 'tip-item';
-                    div.innerHTML = `< span class="tip-bullet" >•</span > <span>${t}</span>`;
+                    div.innerHTML = `<span class="tip-bullet" >•</span> <span>${t}</span>`;
                     tipsList.appendChild(div);
                 });
 
@@ -5603,12 +6289,12 @@
                     const card = document.createElement('div');
                     card.className = 'related-course-card';
                     card.innerHTML = `
-                        < div class="related-course-header" >
+                        <div class="related-course-header" >
                             <span class="related-course-name">${course.name}</span>
                             <span class="related-why-tag">${rel.why}</span>
-                        </div >
+                        </div>
                         <p class="related-desc" style="font-style: italic; color: #475569; margin-bottom: 1rem;">"${rel.desc}"</p>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Think of this as ${rec.name}'s sibling—similar DNA, but a different personality. It shares a common foundation but explores different applications.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Think of this as ${course.name}'s sibling—similar DNA, but a different personality. It shares a common foundation but explores different applications.</p>
                         <button class="btn-icon" onclick="selectGoal('${rel.key}')">View Guidance</button>
                     `;
                     relatedCont.appendChild(card);
@@ -5630,10 +6316,10 @@
                     tips.push("Your current cutoff is excellent! You are likely to get top colleges like CEG or MIT.");
                     tips.push("Focus on maintaining consistency and preparing for counselling procedures.");
                 } else if (cutoff > 175) {
-                    tips.push(`Your cutoff(${ cutoff.toFixed(2) }) is good.To reach top - tier colleges for ${ branchMapping[targetBranch].name }, aim for 190 + marks.`);
-                    tips.push(`Strengthen your ${ topSubject === 'Math' ? 'Physics' : 'Math' } to boost your composite score significantly.`);
+                    tips.push(`Your cutoff(${cutoff.toFixed(2)}) is good.To reach top - tier colleges for ${branchMapping[targetBranch].name}, aim for 190 + marks.`);
+                    tips.push(`Strengthen your ${topSubject === 'Math' ? 'Physics' : 'Math'} to boost your composite score significantly.`);
                 } else {
-                    tips.push(`A cutoff of ${ cutoff.toFixed(2) } means you should focus on medium - tier private colleges or university regional campuses.`);
+                    tips.push(`A cutoff of ${cutoff.toFixed(2)} means you should focus on medium - tier private colleges or university regional campuses.`);
                     tips.push("Intensive practice in Mathematics is recommended as it has 50% weightage in TNEA calculation.");
                 }
 
@@ -5644,43 +6330,6 @@
                 return tips;
             }
 
-            function renderInterestQuiz() {
-                const q = assessmentQuestions[currentQuizStep];
-                document.getElementById('quizQuestion').innerText = q.text;
-                document.getElementById('quizDesc').innerText = q.desc;
-
-                const optionsCont = document.getElementById('quizOptions');
-                optionsCont.innerHTML = q.options.map((opt, idx) => `
-                        < div class="quiz-option" onclick = "selectQuizOption(${idx})" >
-                        <h5>${opt.text}</h5>
-                        <p>${opt.desc}</p>
-                    </div >
-                        `).join('');
-
-                const progress = ((currentQuizStep) / assessmentQuestions.length) * 100;
-                document.getElementById('quizProgressBar').style.width = `${ progress }%`;
-            }
-
-            function selectQuizOption(optionIdx) {
-                const q = assessmentQuestions[currentQuizStep];
-                const selected = q.options[optionIdx];
-
-                // Add scores
-                for (let key in selected.score) {
-                    currentAssessment.interests[key] += selected.score[key];
-                }
-
-                currentQuizStep++;
-                if (currentQuizStep < assessmentQuestions.length) {
-                    renderInterestQuiz();
-                } else {
-                    document.getElementById('quizProgressBar').style.width = '100%';
-                    setTimeout(() => {
-                        navigateToAssessmentScreen('modeSelection');
-                    }, 300);
-                }
-            }
-
             function startAssessment() {
                 currentAssessment.history = [];
                 currentAssessment.selectedCompareBranches = [];
@@ -5688,10 +6337,13 @@
                 navigateToAssessmentScreen('academicProfile');
             }
 
-            // Initialize App
-            window.addEventListener('DOMContentLoaded', () => {
+            function initApp() {
+                initAuth();
                 loadData();
-            });
+                updateFavBadge();
+            }
+
+            window.addEventListener('load', initApp);
 
         </script>
 </body>
