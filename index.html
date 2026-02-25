@@ -131,7 +131,9 @@
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+            margin-left: auto;
         }
 
         .nav-link {
@@ -2817,15 +2819,13 @@
                 </div>
             </a>
             <nav class="nav-links">
-                <button class="nav-link" data-tab="predictor" onclick="switchTab('predictor')">📚 Course
-                    Predictor</button>
-                <button class="nav-link" data-tab="cutoff-search" onclick="switchTab('cutoff-search')">Search
-                    Cutoffs</button>
-                <button class="nav-link" data-tab="courses" onclick="switchTab('courses')">Course Insights</button>
+                <button class="nav-link" data-tab="assessment" onclick="switchTab('assessment')">Assessment</button>
+                <button class="nav-link" data-tab="predictor" onclick="switchTab('predictor')">Predictor</button>
+                <button class="nav-link" data-tab="cutoff-search" onclick="switchTab('cutoff-search')">Cutoffs</button>
+                <button class="nav-link" data-tab="courses" onclick="switchTab('courses')">Insights</button>
                 <button class="nav-link" data-tab="rankings" onclick="switchTab('rankings')">Rankings</button>
-                <button class="nav-link" data-tab="compare" onclick="switchTab('compare')">Compare Course</button>
-                <button class="nav-link" data-tab="assessment" onclick="switchTab('assessment')">📝 Assessment</button>
-                <button class="nav-link" data-tab="favorites" onclick="switchTab('favorites')">❤️ Favorites <span
+                <button class="nav-link" data-tab="compare" onclick="switchTab('compare')">Compare</button>
+                <button class="nav-link" data-tab="favorites" onclick="switchTab('favorites')">Favorites <span
                         class="fav-count-badge" id="favCountBadge" style="display:none">0</span></button>
             </nav>
             <div id="userArea">
@@ -3706,21 +3706,33 @@
                     appState.previousTab = appState.currentPageTab;
                 }
                 appState.currentPageTab = tabId;
-                // Update Nav UI
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                    if (link.dataset.tab === tabId) link.classList.add('active');
-                });
 
-                // Update Section Visibility
+                // Hide all sections
                 document.querySelectorAll('.app-section').forEach(section => {
                     section.classList.remove('active');
                 });
-                document.getElementById(tabId).classList.add('active');
+
+                // Deactivate all links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Show active section
+                const targetSection = document.getElementById(tabId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+
+                // Set active link in main nav
+                const targetLink = document.querySelector(`.nav-link[data-tab="${tabId}"]`);
+                if (targetLink) {
+                    targetLink.classList.add('active');
+                }
 
                 // Scroll to top
-                window.scrollTo(0, 0);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+
 
             function goBackInsights() {
                 if (appState.previousTab && appState.previousTab !== 'courses') {
@@ -4032,7 +4044,7 @@
                                 </div>
                             </div>
                             <button class="fav-btn ${isFav ? 'saved' : ''}" 
-                                    onclick="toggleBranchFavorite('${c.name.replace(/'/g, "\\'")}')" 
+                                    onclick="toggleBranchFavorite('${c.name.replace(/'/g, "\\'")}', this)" 
                                     style="padding:8px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:10px; background:var(--surface);"
                                     title="${isFav ? 'Remove from favorites' : 'Save to favorites'}">
                                 ${isFav ? '❤️' : '🤍'}
@@ -5275,7 +5287,7 @@
                 return getFavoriteBranches().includes(name);
             }
 
-            function toggleBranchFavorite(name) {
+            function toggleBranchFavorite(name, btnEl) {
                 if (!authState.isLoggedIn) {
                     closeCourseModal();
                     showLoginModal();
@@ -5295,11 +5307,19 @@
                 localStorage.setItem('tnea_users', JSON.stringify(users));
 
                 // Refresh UI
-                const favBtn = document.getElementById('favBranchBtn');
-                if (favBtn) {
+                if (btnEl) {
                     const isFav = isBranchFavorite(name);
-                    favBtn.innerHTML = isFav ? '❤️ Branch Saved' : '🤍 Save Branch to Favorites';
+                    btnEl.innerHTML = isFav ? '❤️' : '🤍';
+                    btnEl.classList.toggle('saved', isFav);
                 }
+
+                // Also update the modal button if it exists
+                const modalFavBtn = document.getElementById('favBranchBtn');
+                if (modalFavBtn) {
+                    const isFav = isBranchFavorite(name);
+                    modalFavBtn.innerHTML = isFav ? '❤️ Branch Saved' : '🤍 Save Branch to Favorites';
+                }
+
                 updateFavBadge();
                 if (appState.currentPageTab === 'favorites') renderFavorites();
             }
@@ -5646,153 +5666,303 @@
 
             const assessmentQuestions = [
                 {
-                    text: "When solving a problem, you prefer:",
+                    text: "When solving a problem, you like to:",
                     desc: "Choose the method that feels most natural to you.",
                     options: [
-                        { text: "Writing code or logical steps", ref: "you prefer writing code and logic", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Understanding how physical parts work", ref: "you enjoy mechanical systems", score: { mech: 15, auto: 12, prod: 10 } },
-                        { text: "Analyzing data and patterns", ref: "you are a data thinker", score: { ai: 15, math: 12, it: 10 } },
-                        { text: "Designing structures or layouts", ref: "you have a designer's eye", score: { civil: 15, fashion: 12, env: 10 } }
+                        { text: "Use computer and think logically", ref: "you enjoy logical problem solving on computers", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Work with tools or machines", ref: "you have a knack for machines and tools", score: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Design buildings or plans", ref: "you are a natural designer of physical structures", score: { civil: 15, env: 12, agri: 10 } },
+                        { text: "Study and analyze deeply", ref: "you thrive on deep analysis and systems", score: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
-                    text: "Which activity sounds more interesting to you?",
-                    desc: "Think about how you'd like to spend your workday.",
-                    options: [
-                        { text: "Building a mobile app", ref: "you're interested in app development", score: { cs: 15, it: 15, ai: 10 } },
-                        { text: "Working with engines or machines", ref: "you love engines and machinery", score: { auto: 15, mech: 15, aero: 12 } },
-                        { text: "Managing construction projects", ref: "you want to manage big structures", score: { civil: 15, prod: 12, env: 10 } },
-                        { text: "Working with electronic devices", ref: "you're fascinated by electronics", score: { ec: 15, ee: 15, robot: 12 } }
-                    ]
-                },
-                {
-                    text: "What type of YouTube videos do you usually watch?",
-                    desc: "What catches your attention during your free time?",
-                    options: [
-                        { text: "Tech & software", ref: "you keep up with software tech", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Mechanical inventions", ref: "you're into mechanical inventions", score: { mech: 15, auto: 12, prod: 10 } },
-                        { text: "Infrastructure / buildings", ref: "you're curious about infrastructure", score: { civil: 15, env: 12, agri: 10 } },
-                        { text: "AI & futuristic tech", ref: "you're excited by AI and the future", score: { ai: 15, robot: 15, ec: 10 } }
-                    ]
-                },
-                {
-                    text: "In school, which type of practical classes did you enjoy more?",
+                    text: "In school, you enjoyed:",
                     desc: "Recall your favorite hands-on memories.",
                     options: [
-                        { text: "Computer lab", ref: "you were a computer lab star", score: { cs: 15, it: 15, math: 10 } },
-                        { text: "Physics lab", ref: "you excelled in the physics lab", score: { ee: 15, ec: 15, mech: 10 } },
-                        { text: "Workshop", ref: "you loved the workshop sessions", score: { mech: 15, prod: 15, auto: 10 } },
-                        { text: "Drawing / design", ref: "you enjoyed design and drafting", score: { civil: 15, fashion: 12, textile: 12 } }
+                        { text: "Computer lab", ref: "you were a star in the computer lab", score: { cs: 15, it: 15, cyber: 10 } },
+                        { text: "Physics lab", ref: "you excelled in physics and electronics", score: { ec: 15, ee: 15, robot: 12 } },
+                        { text: "Workshop practice", ref: "you loved working in the machine workshop", score: { mech: 15, prod: 15, auto: 12 } },
+                        { text: "Drawing or design", ref: "you enjoyed design and drafting", score: { civil: 15, fashion: 12, textile: 12 } }
+                    ]
+                },
+                {
+                    text: "Your favorite type of work would be:",
+                    desc: "Envision your ideal daily routine.",
+                    options: [
+                        { text: "Sitting with computer", ref: "you prefer an IT-focused desk job", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Working with machines", ref: "you want to be around active machinery", score: { mech: 15, auto: 15, prod: 15 } },
+                        { text: "Visiting sites and projects", ref: "you like being on-site for physical projects", score: { civil: 15, env: 12, agri: 12 } },
+                        { text: "Researching new ideas", ref: "you are driven by research and innovation", score: { ai: 15, biomed: 15, chem: 15 } }
+                    ]
+                },
+                {
+                    text: "You feel strong in:",
+                    desc: "Identify your core natural talent.",
+                    options: [
+                        { text: "Logical thinking", ref: "logic is your primary mental tool", score: { cs: 15, it: 15, math: 12 } },
+                        { text: "Practical work", ref: "you're a hands-on technical worker", score: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Planning & structure", ref: "you're a master of organization and structure", score: { civil: 15, env: 12, agri: 12 } },
+                        { text: "Analytical thinking", ref: "you excel at breaking down complex data", score: { ai: 15, robot: 15, ec: 12 } }
+                    ]
+                },
+                {
+                    text: "What excites you more?",
+                    desc: "The type of project that ignites your passion.",
+                    options: [
+                        { text: "Creating an app", ref: "you're an aspiring app developer", score: { cs: 15, it: 15, ai: 10 } },
+                        { text: "Fixing an engine", ref: "you're a pro at engine mechanics", score: { auto: 15, mech: 15, aero: 12 } },
+                        { text: "Designing a building", ref: "you have the vision of an architect", score: { civil: 15, env: 12, agri: 10 } },
+                        { text: "Building smart systems", ref: "you're building the brain of future tech", score: { ai: 15, robot: 15, ec: 12 } }
+                    ]
+                },
+                {
+                    text: "You prefer learning by:",
+                    desc: "How do you naturally process information?",
+                    options: [
+                        { text: "Practicing on computer", ref: "you learn best through digital practice", score: { cs: 15, it: 15, cyber: 10 } },
+                        { text: "Doing physical work", ref: "you're a hands-on physical learner", score: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Drawing and planning", ref: "you learn by visualizing and drafting", score: { civil: 15, fashion: 12, textile: 12 } },
+                        { text: "Reading and analyzing", ref: "you're a deep analytical researcher", score: { ai: 15, biomed: 15, chem: 15 } }
+                    ]
+                },
+                {
+                    text: "Your dream workplace:",
+                    desc: "Where you see yourself in 5 years.",
+                    options: [
+                        { text: "IT office", ref: "you belong in a fast-paced tech firm", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Factory", ref: "the heart of industry is where you belong", score: { prod: 15, mech: 15, auto: 12 } },
+                        { text: "Construction site", ref: "you want to build massive landmarks", score: { civil: 15, env: 12, architecture: 12 } },
+                        { text: "Research lab", ref: "you are a pioneer of innovation labs", score: { ai: 15, biomed: 15, chem: 15 } }
+                    ]
+                },
+                {
+                    text: "If something stops working, you:",
+                    desc: "Your instinctive approach to troubleshooting.",
+                    options: [
+                        { text: "Debug software", ref: "you're a digital troubleshootings expert", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Open and check parts", ref: "you're a mechanical investigator", score: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Check structure/design", ref: "you look for foundational structural faults", score: { civil: 15, env: 12, agri: 10 } },
+                        { text: "Study the system logic", ref: "you analyze system-wide patterns", score: { ai: 15, ec: 15, ee: 12 } }
+                    ]
+                },
+                {
+                    text: "You like problems that involve:",
+                    desc: "The category of hurdles you enjoy clearing.",
+                    options: [
+                        { text: "Coding", ref: "digital coding challenges are your forte", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Machines", ref: "mechanical machine problems excite you", score: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Structures", ref: "building structural challenges are your pick", score: { civil: 15, env: 12, agri: 10 } },
+                        { text: "Data or systems", ref: "you master complex data and system logic", score: { ai: 15, robot: 15, ec: 12 } }
+                    ]
+                },
+                {
+                    text: "In free time, you would:",
+                    desc: "What catches your attention during leisure?",
+                    options: [
+                        { text: "Learn new software", ref: "you spend free time on software tech", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Watch machine videos", ref: "you're into mechanical inventions on video", score: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "See building designs", ref: "you're curious about architectural visuals", score: { civil: 15, env: 12, architecture: 15 } },
+                        { text: "Learn about AI or smart tech", ref: "you're excited by AI and the future", score: { ai: 15, robot: 15, ec: 12 } }
+                    ]
+                },
+                {
+                    text: "You are more comfortable:",
+                    desc: "Your characteristic work style.",
+                    options: [
+                        { text: "Working long time on computer", ref: "you have high digital stamina", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Working with tools", ref: "you're a wizard with heavy tools", score: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Working outdoors", ref: "the open air is your preferred workstation", score: { civil: 15, agri: 15, env: 12 } },
+                        { text: "Doing research work", ref: "you're at home in research environments", score: { ai: 15, biomed: 15, chem: 15 } }
+                    ]
+                },
+                {
+                    text: "What gives you satisfaction?",
+                    desc: "What makes you feel truly accomplished?",
+                    options: [
+                        { text: "Solving logical puzzles", ref: "logical puzzles give you great pride", score: { cs: 15, it: 12, ai: 12 } },
+                        { text: "Repairing equipment", ref: "you're the go-to person for repairs", score: { mech: 15, auto: 15, ee: 10 } },
+                        { text: "Designing strong structures", ref: "you build structures that last eternity", score: { civil: 15, env: 12, architecture: 15 } },
+                        { text: "Improving smart systems", ref: "you're a master of technological efficiency", score: { ai: 15, robot: 15, ec: 12 } }
+                    ]
+                },
+                {
+                    text: "Your friends say you are:",
+                    desc: "How others perceive your natural role.",
+                    options: [
+                        { text: "Tech smart", ref: "you've earned a 'tech-smart' reputation", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Practical person", ref: "others see you as a practical fix-it person", score: { mech: 15, auto: 15, civil: 12 } },
+                        { text: "Good planner", ref: "you're the designated planner in your group", score: { civil: 15, prod: 15, env: 12 } },
+                        { text: "Deep thinker", ref: "people respect your deep analytical mind", score: { ai: 15, biomed: 15, chem: 15 } }
+                    ]
+                },
+                {
+                    text: "When learning something new:",
+                    desc: "How you approach a new topic.",
+                    options: [
+                        { text: "Try coding it", ref: "you learn through coding it yourself", score: { cs: 15, it: 15, ai: 12 } },
+                        { text: "Try building it", ref: "you learn by building physical models", score: { mech: 15, auto: 15, robot: 12 } },
+                        { text: "Draw and plan it", ref: "you learn by drafting it on paper", score: { civil: 15, fashion: 12, textile: 12 } },
+                        { text: "Study and understand fully", ref: "you are a master of fundamental principles", score: { ai: 15, biomed: 15, chem: 15 } }
+                    ]
+                },
+                {
+                    text: "Which place feels comfortable?",
+                    desc: "Identify your ideal professional habitat.",
+                    options: [
+                        { text: "Software company", ref: "you belong in a high-tech software house", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Industrial area", ref: "you're comfortable in industrial production zones", score: { prod: 15, mech: 15, auto: 12 } },
+                        { text: "Building project site", ref: "the site of a building project is your workspace", score: { civil: 15, env: 12, architecture: 15 } },
+                        { text: "Innovation center", ref: "you thrive in centers of creative innovation", score: { ai: 15, robot: 15, aero: 12 } }
                     ]
                 },
                 {
                     text: "You prefer a job that:",
-                    desc: "Envision your ideal future work environment.",
+                    desc: "Your core work-life preference.",
                     options: [
-                        { text: "Allows remote or IT-based work", ref: "you value flexible IT roles", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Involves site visits or field work", ref: "you prefer being out in the field", score: { civil: 15, agri: 12, env: 12 } },
-                        { text: "Requires hands-on machinery work", ref: "you're a hands-on machinery person", score: { mech: 15, auto: 15, prod: 12 } },
-                        { text: "Involves analysis and problem-solving", ref: "you thrive on deep analysis", score: { ai: 15, math: 15, biomed: 10 } }
+                        { text: "Can be done remotely", ref: "you value remote and digital flexibility", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Needs physical work", ref: "you thrive on physical technical labor", score: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Involves field visits", ref: "you like work that takes you out into the field", score: { civil: 15, agri: 15, env: 12 } },
+                        { text: "Needs research", ref: "you're a natural research and development hire", score: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
-                    text: "When learning something new, you:",
-                    desc: "How do you naturally process information?",
+                    text: "You enjoy:",
+                    desc: "Your primary professional interest.",
                     options: [
-                        { text: "Try coding it", ref: "you learn through code", score: { cs: 15, it: 12, ai: 12 } },
-                        { text: "Try assembling it", ref: "you learn by building things", score: { mech: 15, auto: 12, robot: 12 } },
-                        { text: "Study its structure", ref: "you focus on structural logic", score: { civil: 15, prod: 12, architecture: 10 } },
-                        { text: "Research deeply before applying", ref: "you are a deep researcher", score: { ai: 15, chem: 12, biomed: 12 } }
+                        { text: "Digital work", ref: "you're a digital professional at heart", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Mechanical work", ref: "you're a master of mechanical works", score: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Structural work", ref: "you're built for structural engineering works", score: { civil: 15, env: 12, agri: 12 } },
+                        { text: "Intelligent systems", ref: "you're an architect of intelligent digital systems", score: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
-                    text: "Which environment suits you more?",
-                    desc: "Where do you feel most productive?",
+                    text: "When making decisions, you use:",
+                    desc: "Identify your primary decision-making tool.",
                     options: [
-                        { text: "Office with computers", ref: "you're at home in a tech office", score: { cs: 15, it: 15, cyber: 10 } },
-                        { text: "Industrial setting", ref: "you thrive in industrial plants", score: { prod: 15, mech: 12, auto: 12 } },
-                        { text: "Construction site", ref: "the construction site is your place", score: { civil: 15, architecture: 12, env: 10 } },
-                        { text: "Research lab", ref: "a research lab sparks your curiosity", score: { ai: 15, chem: 15, biomed: 15 } }
+                        { text: "Logic", ref: "pure logic is your guide for decisions", score: { cs: 15, it: 15, math: 12 } },
+                        { text: "Real experience", ref: "you base decisions on real-world experience", score: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Planning", ref: "careful planning is your decision-making base", score: { civil: 15, env: 12, architecture: 15 } },
+                        { text: "Data", ref: "data-driven decisions are your specialty", score: { ai: 15, chem: 15, biomed: 15 } }
                     ]
                 },
                 {
-                    text: "What gives you more satisfaction?",
-                    desc: "What makes you feel truly accomplished?",
+                    text: "You see yourself as:",
+                    desc: "Your core identity as a problem solver.",
                     options: [
-                        { text: "Solving logical puzzles", ref: "you love logical puzzles", score: { math: 15, cs: 12, ai: 12 } },
-                        { text: "Fixing mechanical issues", ref: "you're a pro at mechanical fixes", score: { mech: 15, auto: 15, ee: 10 } },
-                        { text: "Designing physical models", ref: "you're great at physical design", score: { civil: 15, architecture: 15, fashion: 10 } },
-                        { text: "Optimizing systems", ref: "you're a master of efficiency", score: { prod: 15, it: 12, math: 10 } }
+                        { text: "Logical person", ref: "you identify as a logical innovator", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Hands-on worker", ref: "you're essentially a hands-on mechanical worker", score: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Designer", ref: "you are primarily a physical designer", score: { civil: 15, fashion: 15, textile: 12 } },
+                        { text: "Analyst", ref: "you are a deep system analyst", score: { ai: 15, math: 15, ec: 12 } }
                     ]
                 },
                 {
-                    text: "Which skill do you feel strongest in?",
-                    desc: "Your core natural talent.",
-                    options: [
-                        { text: "Logical thinking", ref: "you have sharp logical skills", score: { cs: 15, it: 12, cyber: 12 } },
-                        { text: "Physical/mechanical understanding", ref: "you understand mechanics intuitively", score: { mech: 15, auto: 15, prod: 12 } },
-                        { text: "Visualization & design", ref: "you can see designs in your head", score: { civil: 15, fashion: 15, textile: 12 } },
-                        { text: "Analytical reasoning", ref: "your analytical skills are top-notch", score: { ai: 15, math: 15, chem: 10 } }
-                    ]
-                },
-                {
-                    text: "If given a project, you would choose:",
+                    text: "If given a project, you choose:",
                     desc: "Your dream assignment.",
                     options: [
-                        { text: "Develop a website", ref: "you're a web development fan", score: { it: 15, cs: 12, cyber: 10 } },
-                        { text: "Design a machine", ref: "you dream of designing machines", score: { mech: 15, auto: 15, aero: 12 } },
-                        { text: "Plan a building", ref: "you're a natural architect/builder", score: { civil: 15, env: 12, agri: 10 } },
-                        { text: "Create a smart AI solution", ref: "you're driven by intelligent AI", score: { ai: 15, cs: 12, robot: 10 } }
+                        { text: "Build a website", ref: "website creation is your preferred project", score: { it: 15, cs: 15, cyber: 12 } },
+                        { text: "Improve a machine", ref: "you'd rather spend time improving machinery", score: { mech: 15, auto: 15, prod: 15 } },
+                        { text: "Plan a building", ref: "planning a building is your ideal project", score: { civil: 15, env: 12, architecture: 15 } },
+                        { text: "Develop automation", ref: "you want to automate everything with AI", score: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
-                    text: "You feel more confident working with:",
-                    desc: "The tools of your trade.",
+                    text: "You prefer tasks that are:",
+                    desc: "The nature of work you enjoy most.",
                     options: [
-                        { text: "Algorithms", ref: "algorithms are your language", score: { cs: 15, ai: 15, math: 12 } },
-                        { text: "Tools & equipment", ref: "you're confident with heavy tools", score: { mech: 15, auto: 12, prod: 12 } },
-                        { text: "Blueprints", ref: "you speak the language of blueprints", score: { civil: 15, architecture: 15, env: 10 } },
-                        { text: "Circuits", ref: "electronic circuits are your world", score: { ec: 15, ee: 15, robot: 12 } }
+                        { text: "Technology based", ref: "you live at the center of technology", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Tool based", ref: "you're a master of technical tools", score: { mech: 15, auto: 12, aero: 12 } },
+                        { text: "Structure based", ref: "you care about structural foundations", score: { civil: 15, architect: 12, env: 12 } },
+                        { text: "Research based", ref: "you're a pioneer of research fields", score: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
-                    text: "What kind of problems excite you?",
-                    desc: "Challenges that keep you awake.",
-                    options: [
-                        { text: "Software bugs", ref: "you're a relentless bug hunter", score: { cs: 15, cyber: 15, it: 12 } },
-                        { text: "Machine breakdowns", ref: "you're the go-to person for breakdowns", score: { mech: 15, auto: 15, ee: 10 } },
-                        { text: "Structural design challenges", ref: "you love building challenges", score: { civil: 15, environment: 12, agri: 10 } },
-                        { text: "Data-related issues", ref: "you're a data problem-solver", score: { ai: 15, it: 15, math: 12 } }
-                    ]
-                },
-                {
-                    text: "Your ideal workplace looks like:",
-                    desc: "Where you see yourself in 5 years.",
-                    options: [
-                        { text: "Tech company", ref: "you belong in a fast-paced tech firm", score: { cs: 15, it: 15, ai: 12 } },
-                        { text: "Manufacturing plant", ref: "production lines excite you", score: { prod: 15, mech: 12, auto: 10 } },
-                        { text: "Construction company", ref: "you want to build massive landmarks", score: { civil: 15, env: 10, architecture: 12 } },
-                        { text: "Research & innovation center", ref: "you are a pioneer of innovation", score: { ai: 15, biomed: 15, chem: 12 } }
-                    ]
-                },
-                {
-                    text: "You prefer learning through:",
-                    desc: "Your favorite way to grow.",
-                    options: [
-                        { text: "Coding practice", ref: "you grow through coding", score: { cs: 15, it: 15, cyber: 10 } },
-                        { text: "Physical experiments", ref: "you value physical experimentation", score: { mech: 15, ee: 12, ec: 12 } },
-                        { text: "Design drafting", ref: "you're a master of design drafts", score: { civil: 15, architecture: 15, fashion: 12 } },
-                        { text: "Case studies & analysis", ref: "you learn from deep real-world cases", score: { prod: 15, ai: 12, biomed: 10 } }
-                    ]
-                },
-                {
-                    text: "Which achievement would make you proud?",
+                    text: "Which achievement makes you proud?",
                     desc: "The ultimate milestone.",
                     options: [
-                        { text: "Launching a tech product", ref: "launching a tech product is your goal", score: { it: 15, cs: 15, ai: 12 } },
-                        { text: "Designing a powerful engine", ref: "you want to design an iconic engine", score: { auto: 15, mech: 15, aero: 12 } },
-                        { text: "Constructing a landmark building", ref: "you want to build a world landmark", score: { civil: 15, architecture: 15, environment: 10 } },
-                        { text: "Developing an intelligent system", ref: "the gift of intelligence is your aim", score: { ai: 15, cyber: 15, robot: 12 } }
+                        { text: "Launching software", ref: "launching software products is your goal", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Designing engine", ref: "you want to design an iconic engine unit", score: { auto: 15, mech: 15, aero: 12 } },
+                        { text: "Building bridge", ref: "you'd like to build a landmark bridge", score: { civil: 15, env: 12, agri: 12 } },
+                        { text: "Creating smart robot", ref: "creating an intelligent robot is your aim", score: { ai: 15, robot: 15, ec: 12 } }
+                    ]
+                },
+                {
+                    text: "Under pressure, you:",
+                    desc: "Your characteristic reaction to stress.",
+                    options: [
+                        { text: "Think logically", ref: "logic is your shield during pressure", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Act practically", ref: "you remain calm and act practically", score: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Plan carefully", ref: "you carefully pivot with a new plan", score: { civil: 15, prod: 15, env: 12 } },
+                        { text: "Analyze deeply before acting", ref: "you analyze every angle before acting", score: { ai: 15, biomed: 15, chem: 15 } }
+                    ]
+                },
+                {
+                    text: "You are interested in:",
+                    desc: "Identify your primary curiosity.",
+                    options: [
+                        { text: "Digital innovation", ref: "digital innovation drives your curiosity", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Mechanical systems", ref: "you are fascinated by mechanical systems", score: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Infrastructure", ref: "you care about the world's infrastructure", score: { civil: 15, env: 15, agri: 12 } },
+                        { text: "Artificial intelligence", ref: "you're obsessed with artificial intelligence", score: { ai: 15, robot: 15, ec: 12 } }
+                    ]
+                },
+                {
+                    text: "You imagine future job in:",
+                    desc: "Where you see your career path landing.",
+                    options: [
+                        { text: "IT company", ref: "you see yourself in a top IT company", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Manufacturing company", ref: "you see yourself leading manufacturing", score: { prod: 15, mech: 15, auto: 12 } },
+                        { text: "Construction company", ref: "you want to lead a construction firm", score: { civil: 15, architecture: 15, env: 12 } },
+                        { text: "Tech research company", ref: "you're destined for tech research", score: { ai: 15, biomed: 15, chem: 15 } }
+                    ]
+                },
+                {
+                    text: "Which skill suits you?",
+                    desc: "Identify your strongest suit.",
+                    options: [
+                        { text: "Coding", ref: "coding is your most natural skill", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Machine handling", ref: "you have a natural hand for machines", score: { mech: 15, auto: 15, ee: 12 } },
+                        { text: "Design drawing", ref: "you're a master of structural design drawing", score: { civil: 15, architecture: 15, fashion: 12 } },
+                        { text: "Data analysis", ref: "you are a master of analytical data analysis", score: { ai: 15, math: 15, it: 12 } }
+                    ]
+                },
+                {
+                    text: "You enjoy learning about:",
+                    desc: "What keeps you reading and curious.",
+                    options: [
+                        { text: "Software updates", ref: "you're always reading software updates", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Machine parts", ref: "you're curious about mechanical parts", score: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Building materials", ref: "you're interested in building material science", score: { civil: 15, env: 12, architecture: 12 } },
+                        { text: "Smart technology", ref: "you're fascinated by smart technologies", score: { ai: 15, robot: 15, ec: 12 } }
+                    ]
+                },
+                {
+                    text: "If a system fails, you:",
+                    desc: "Your troubleshooting specialty.",
+                    options: [
+                        { text: "Check program", ref: "you go straight to checking the program code", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Check machine", ref: "you go straight to checking the machine parts", score: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Check structure", ref: "you go straight to checking the structure", score: { civil: 15, env: 12, architecture: 12 } },
+                        { text: "Check logic", ref: "you go straight to checking the systemic logic", score: { ai: 15, math: 15, ec: 12 } }
+                    ]
+                },
+                {
+                    text: "You prefer:",
+                    desc: "Your primary work preference.",
+                    options: [
+                        { text: "Computer-based work", ref: "you are a computer-based professional", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Hands-on physical work", ref: "you prefer hands-on physical labor", score: { mech: 15, auto: 15, prod: 15 } },
+                        { text: "Field work", ref: "you like being in the field", score: { civil: 15, agri: 15, env: 12 } },
+                        { text: "Research work", ref: "you are purely a research professional", score: { ai: 15, biomed: 15, chem: 15 } }
+                    ]
+                },
+                {
+                    text: "Which work feels natural to you?",
+                    desc: "Identify your true professional home.",
+                    options: [
+                        { text: "Digital & software", ref: "digital and software work is your home", score: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Machines & tools", ref: "machines and tools feel most natural", score: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Buildings & sites", ref: "buildings and project sites are your home", score: { civil: 15, env: 15, architecture: 12 } },
+                        { text: "Smart systems & analysis", ref: "smart systems and deep analysis is your world", score: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 }
             ];
@@ -5951,6 +6121,15 @@
                 currentAssessment.goal = key;
                 currentAssessment.mode = 'goal';
                 showAssessmentResults();
+
+                // Fix: Scroll to top so user sees the updated guidance
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Also show the detailed modal for that specific branch
+                const branch = branchMapping[key];
+                if (branch) {
+                    showCourseDetails(branch.name);
+                }
             }
 
             function proceedToModeSelection() {
@@ -6158,7 +6337,18 @@
                 }
 
                 const rec = branchMapping[bestKey] || branchMapping.cs;
-                document.getElementById('resultBranch').innerText = goal ? `Goal Analysis: ${rec.name} ` : rec.name;
+                const isRecFav = isBranchFavorite(rec.name);
+                document.getElementById('resultBranch').innerHTML = `
+                    <div style="display:flex; align-items:center; justify-content:center; gap:1rem;">
+                        <span>${goal ? `Goal Analysis: ${rec.name}` : rec.name}</span>
+                        <button class="btn-icon ${isRecFav ? 'saved' : ''}" 
+                                onclick="toggleBranchFavorite('${rec.name}', this)" 
+                                title="Favorite this course"
+                                style="font-size: 1.5rem; background: none; border: none; cursor: pointer;">
+                            ${isRecFav ? '❤️' : '🤍'}
+                        </button>
+                    </div>
+                `;
 
 
                 const topSubject = Object.entries({ Math: marks.math, Physics: marks.physics, Chemistry: marks.chem, CS: marks.cs })
@@ -6286,15 +6476,23 @@
                 related.forEach(rel => {
                     const course = branchMapping[rel.key];
                     if (!course) return;
+                    const isCourseFav = isBranchFavorite(course.name);
                     const card = document.createElement('div');
                     card.className = 'related-course-card';
                     card.innerHTML = `
                         <div class="related-course-header" >
                             <span class="related-course-name">${course.name}</span>
-                            <span class="related-why-tag">${rel.why}</span>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <span class="related-why-tag">${rel.why}</span>
+                                <button class="btn-icon ${isCourseFav ? 'saved' : ''}" 
+                                        onclick="event.stopPropagation(); toggleBranchFavorite('${course.name}', this)" 
+                                        style="background:none; border:none; cursor:pointer; font-size:1.2rem; padding:0;">
+                                    ${isCourseFav ? '❤️' : '🤍'}
+                                </button>
+                            </div>
                         </div>
                         <p class="related-desc" style="font-style: italic; color: #475569; margin-bottom: 1rem;">"${rel.desc}"</p>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Think of this as ${course.name}'s sibling—similar DNA, but a different personality. It shares a common foundation but explores different applications.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;"><strong>In simple words:</strong> This is like ${rec.name}'s cousin. ${course.desc}</p>
                         <button class="btn-icon" onclick="selectGoal('${rel.key}')">View Guidance</button>
                     `;
                     relatedCont.appendChild(card);
