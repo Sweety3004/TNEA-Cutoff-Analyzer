@@ -31,6 +31,22 @@
             box-sizing: border-box;
         }
 
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+        }
+
+        .nav-overlay.active {
+            display: block;
+        }
+
         @media (max-width: 768px) {
             :root {
                 --hero-padding: 4rem 0 2rem;
@@ -286,6 +302,12 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .stat-card {
@@ -713,6 +735,20 @@
             top: 0;
         }
 
+        @media (max-width: 768px) {
+
+            th,
+            td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .branch-code {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.35rem;
+            }
+        }
+
         tr:hover {
             background: var(--surface-hover);
         }
@@ -1034,6 +1070,17 @@
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .branch-comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .branch-compare-card {
+                padding: 1.5rem;
+            }
         }
 
         .branch-compare-card {
@@ -2950,7 +2997,9 @@
                     <div class="logo-sub">Assessment</div>
                 </div>
             </a>
-            <nav class="nav-links">
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
+            <div class="nav-overlay" id="navOverlay"></div>
+            <nav class="nav-links" id="navLinks">
                 <button class="nav-link" data-tab="assessment" onclick="switchTab('assessment')">Assessment</button>
                 <button class="nav-link" data-tab="predictor" onclick="switchTab('predictor')">Predictor</button>
                 <button class="nav-link" data-tab="cutoff-search" onclick="switchTab('cutoff-search')">Cutoffs</button>
@@ -3834,6 +3883,12 @@
 
             // --- Navigation ---
             function switchTab(tabId) {
+                // Close mobile menu if open
+                const navLinks = document.getElementById('navLinks');
+                if (navLinks && navLinks.classList.contains('active')) {
+                    toggleMenu && toggleMenu();
+                }
+
                 if (appState.currentPageTab !== tabId) {
                     appState.previousTab = appState.currentPageTab;
                 }
