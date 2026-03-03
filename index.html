@@ -2209,11 +2209,11 @@
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 2.5rem;
-            min-height: 400px;
+            padding: 1.5rem;
+            min-height: auto;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             position: relative;
             overflow: hidden;
         }
@@ -2223,8 +2223,8 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 2rem;
-            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 12px;
@@ -2297,6 +2297,62 @@
             font-weight: 600;
             font-size: 0.9rem;
             color: var(--text);
+        }
+
+        /* Quiz Navigation Grid */
+        .quiz-nav-container {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            width: 100%;
+        }
+
+        .quiz-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .quiz-nav-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-nav-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .quiz-nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .quiz-nav-btn.answered {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .quiz-nav-btn.answered.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
 
         /* Guidance Styles */
@@ -2457,6 +2513,48 @@
         .mode-card p {
             font-size: 0.9rem;
             color: var(--text-muted);
+        }
+
+        /* Quiz Options 2x2 Grid */
+        .quiz-options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 0;
+        }
+
+        .quiz-option {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.04);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.08);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .quiz-option h5 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
         }
 
         .branch-chips-selector {
@@ -3118,6 +3216,8 @@
             <div class="nav-overlay" id="navOverlay"></div>
             <nav class="nav-links" id="navLinks">
                 <button class="nav-link" data-tab="assessment" onclick="switchTab('assessment')">Assessment</button>
+                <button class="nav-link" data-tab="guided-compare" onclick="switchTab('guided-compare')">Guided
+                    Compare</button>
                 <button class="nav-link" data-tab="predictor" onclick="switchTab('predictor')">Predictor</button>
                 <button class="nav-link" data-tab="cutoff-search" onclick="switchTab('cutoff-search')">Cutoffs</button>
                 <button class="nav-link" data-tab="courses" onclick="switchTab('courses')">Insights</button>
@@ -3264,23 +3364,34 @@
             </div>
         </section>
 
-        <!-- Assessment Section -->
+        <!-- Assessment Section (General Discovery Only) -->
         <section id="assessment" class="app-section">
             <div class="container section-container">
                 <div class="assessment-container">
-                    <h2 class="section-title" style="text-align:center;">Course Assessment</h2>
+                    <h2 class="section-title" style="text-align:center;">🧭 General Discovery</h2>
                     <p style="color:var(--text-muted); text-align:center; margin-bottom:2rem;">Not sure which
-                        engineering branch to choose? Take our interest assessment to find your perfect fit.</p>
+                        engineering branch to choose? Answer 30 quick questions and we'll find your perfect fit.</p>
 
                     <!-- Back Navigation Bar -->
-                    <div id="assessmentBackNav" class="assessment-nav" style="display:none;">
-                        <button class="back-btn" onclick="handleAssessmentBack()">
-                            <span>←</span> Back
-                        </button>
-                        <div class="assessment-steps" id="assessmentStepsIndicators">
-                            <div class="step-indicator" data-step="1"></div>
-                            <div class="step-indicator" data-step="2"></div>
-                            <div class="step-indicator" data-step="3"></div>
+                    <div id="assessmentBackNav" class="assessment-nav"
+                        style="display:none; flex-direction: column; align-items: flex-start;">
+                        <div style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
+                            <button class="back-btn" onclick="handleAssessmentBack()">
+                                <span>←</span> Back
+                            </button>
+                            <div class="assessment-steps" id="assessmentStepsIndicators">
+                                <div class="step-indicator" data-step="1"></div>
+                                <div class="step-indicator" data-step="2"></div>
+                                <div class="step-indicator" data-step="3"></div>
+                            </div>
+                        </div>
+
+                        <!-- Question Navigation Grid (Added below Back button) -->
+                        <div id="quizNavigationContainer" class="quiz-nav-container" style="display:none;">
+                            <div
+                                style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;">
+                                Jump to Question:</div>
+                            <div id="quizNavGrid" class="quiz-nav-grid"></div>
                         </div>
                     </div>
 
@@ -3321,46 +3432,17 @@
                             </div>
                         </div>
 
-                        <button class="btn-primary" onclick="proceedToGoalSelection()">Next: Choose Your Goal</button>
+                        <button class="btn-primary" onclick="proceedToDiscovery()">Begin Assessment Quiz →</button>
                     </div>
 
                     <!-- Goal Selection Step -->
                     <div id="goalSelection" class="form-card" style="display:none; text-align:center;">
                         <div style="font-size:4rem; margin-bottom:1.5rem;">🎯</div>
                         <h3>What is your Goal?</h3>
-                        <p class="form-desc">Select a branch you are most interested in, or use our smart discovery
-                            tool.</p>
-
-                        <div
-                            style="margin-bottom:2.5rem; padding: 1.5rem; background: var(--surface-hover); border-radius: 12px; border: 1px dashed var(--primary);">
-                            <p style="color:var(--text); font-weight: 600; font-size:1rem; margin-bottom:1rem;">Unsure?
-                                Let us help you find your path! ✨</p>
-                            <button class="btn-primary" onclick="proceedToModeSelection()"
-                                style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Help me Discover →</button>
-                        </div>
+                        <p class="form-desc">Select a branch you are most interested in for specific guidance.</p>
 
                         <div class="goal-selection-grid" id="goalGrid">
                             <!-- Populated by JS -->
-                        </div>
-                    </div>
-
-
-                    <div id="modeSelection" class="form-card" style="display:none; text-align:center;">
-                        <div style="font-size:4rem; margin-bottom:1.5rem;">🏗️</div>
-                        <h3>Choose Your Path</h3>
-                        <p class="form-desc">What best describes your current situation?</p>
-
-                        <div class="mode-selection">
-                            <div class="mode-card" onclick="selectAssessmentMode('discovery')">
-                                <div class="mode-icon">🧭</div>
-                                <h4>General Discovery</h4>
-                                <p>I'm not sure which engineering branch to choose. Help me explore!</p>
-                            </div>
-                            <div class="mode-card" onclick="selectAssessmentMode('comparison')">
-                                <div class="mode-icon">⚖️</div>
-                                <h4>Guided Comparison</h4>
-                                <p>I'm confused between 2 or 3 specific branches. Help me decide!</p>
-                            </div>
                         </div>
                     </div>
 
@@ -3381,26 +3463,11 @@
                         </div>
                         <h3 id="quizQuestion" style="font-size:1.5rem; margin-bottom:1rem; color:var(--primary);">
                             Question Text</h3>
-                        <p id="quizDesc" style="color:var(--text-muted); margin-bottom:2rem; font-size:0.95rem;">
+                        <p id="quizDesc" style="color:var(--text-muted); margin-bottom:1.5rem; font-size:0.95rem;">
                             Question description goes here.</p>
 
-                        <div id="quizOptions" class="quiz-options-grid"
-                            style="display:flex; flex-direction:column; gap:1rem;">
+                        <div id="quizOptions" class="quiz-options-grid">
                             <!-- Options populated by JS -->
-                        </div>
-                    </div>
-
-                    <div id="branchSelector" class="form-card" style="display:none; text-align:center;">
-                        <h3>Which branches are you choosing between?</h3>
-                        <p class="form-desc">Select 2 or 3 branches to compare in your assessment.</p>
-
-                        <div class="branch-chips-selector" id="comparisonBranchChips">
-                            <!-- Chips populated by JS -->
-                        </div>
-
-                        <div class="btn-group" style="justify-content:center;">
-                            <button class="btn-primary" id="startComparisonBtn" disabled
-                                onclick="showAssessmentResults()">Show Comparison Guidance</button>
                         </div>
                     </div>
 
@@ -3409,7 +3476,7 @@
                         <h3 class="result-title">Guidance for You</h3>
                         <p id="resultBranch"
                             style="font-size:1.5rem; font-weight:700; margin-bottom:0.5rem; color:var(--text);">Computer
-                            Science & Engineering</p>
+                            Science &amp; Engineering</p>
                         <div class="result-desc" id="resultDesc">Based on your interests and academic performance.</div>
 
 
@@ -3446,6 +3513,120 @@
                         <div class="btn-group" style="justify-content:center;">
                             <button class="btn-secondary" onclick="startAssessment()">Retake Quiz</button>
                             <button class="btn-primary" id="exploreRecommended">Explore Branches</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Guided Compare Section (Separate Module) -->
+        <section id="guided-compare" class="app-section">
+            <div class="container section-container">
+                <div class="assessment-container">
+                    <h2 class="section-title" style="text-align:center;">⚖️ Guided Comparison</h2>
+                    <p style="color:var(--text-muted); text-align:center; margin-bottom:2rem;">Confused between 2 or 3
+                        specific branches? Enter your marks, pick your options, and we'll help you decide!</p>
+
+                    <!-- Back Navigation Bar -->
+                    <div id="gcBackNav" class="assessment-nav" style="display:none;">
+                        <button class="back-btn" onclick="handleGCBack()">
+                            <span>←</span> Back
+                        </button>
+                        <div class="assessment-steps">
+                            <div class="step-indicator" id="gcStep1" data-step="1"></div>
+                            <div class="step-indicator" id="gcStep2" data-step="2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Enter Marks -->
+                    <div id="gcAcademicProfile" class="form-card" style="text-align:center;">
+                        <div style="font-size:4rem; margin-bottom:1.5rem;">⚖️</div>
+                        <h3>Step 1: Enter Your Marks</h3>
+                        <p class="form-desc" style="margin-bottom:2rem;">We'll use your marks to calculate your academic
+                            fit for each branch.</p>
+
+                        <div class="academic-group-selector">
+                            <button id="gcGroupMath" class="academic-group-btn active"
+                                onclick="setGCAcademicGroup('math')">➕ Math Group</button>
+                            <button id="gcGroupCS" class="academic-group-btn" onclick="setGCAcademicGroup('cs')">💻 CS
+                                Group</button>
+                        </div>
+
+                        <div class="mark-input-grid">
+                            <div class="mark-field">
+                                <label>Mathematics (/100)</label>
+                                <input type="number" id="gcMarkMath" placeholder="e.g. 95" min="0" max="100">
+                            </div>
+                            <div class="mark-field">
+                                <label>Physics (/100)</label>
+                                <input type="number" id="gcMarkPhysics" placeholder="e.g. 90" min="0" max="100">
+                            </div>
+                            <div class="mark-field">
+                                <label>Chemistry (/100)</label>
+                                <input type="number" id="gcMarkChem" placeholder="e.g. 88" min="0" max="100">
+                            </div>
+                            <div class="mark-field" id="gcCSMarkField" style="display:none;">
+                                <label>Computer Science (/100)</label>
+                                <input type="number" id="gcMarkCS" placeholder="e.g. 98" min="0" max="100">
+                            </div>
+                            <div class="mark-field">
+                                <label>Overall 12th % (Optional)</label>
+                                <input type="number" id="gcMarkOverall" placeholder="e.g. 92" min="0" max="100">
+                            </div>
+                        </div>
+
+                        <button class="btn-primary" onclick="proceedToGCBranchSelector()">Next: Select Branches
+                            →</button>
+                    </div>
+
+                    <!-- Step 2: Branch Selector -->
+                    <div id="gcBranchSelector" class="form-card" style="display:none; text-align:center;">
+                        <div style="font-size:4rem; margin-bottom:1.5rem;">🎯</div>
+                        <h3>Step 2: Which branches are you choosing between?</h3>
+                        <p class="form-desc">Select 2 or 3 branches to compare in your assessment.</p>
+
+                        <div class="branch-chips-selector" id="gcComparisonBranchChips">
+                            <!-- Chips populated by JS -->
+                        </div>
+
+                        <div class="btn-group" style="justify-content:center;">
+                            <button class="btn-primary" id="gcStartComparisonBtn" disabled
+                                onclick="showGCResults()">Show Comparison Guidance</button>
+                        </div>
+                    </div>
+
+                    <!-- Results -->
+                    <div id="gcResultContainer" class="form-card recommendation-result" style="display:none;">
+                        <div class="result-icon">⚖️</div>
+                        <h3 class="result-title">Your Comparison Result</h3>
+                        <p id="gcResultBranch"
+                            style="font-size:1.5rem; font-weight:700; margin-bottom:0.5rem; color:var(--text);">Best
+                            Match</p>
+                        <div class="result-desc" id="gcResultDesc">Based on your marks and selected branches.</div>
+
+                        <div class="recommendation-tags" id="gcResultTags"></div>
+
+                        <div id="gcGuidanceSection" class="guidance-section">
+                            <div class="guidance-card">
+                                <div class="guidance-header">📈 Mark Improvement Guidance</div>
+                                <div id="gcImprovementTipsList"></div>
+                            </div>
+                            <div class="guidance-card">
+                                <div class="guidance-header">🤝 Related Course Guidance</div>
+                                <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Consider these
+                                    related branches that align with your interests:</p>
+                                <div id="gcRelatedCoursesList" class="related-courses-box"></div>
+                            </div>
+                        </div>
+
+                        <div id="gcComparisonBreakdown" class="comparison-breakdown">
+                            <h4 style="margin-bottom:1rem;">📊 Match Breakdown</h4>
+                            <div id="gcBreakdownList"></div>
+                        </div>
+
+                        <div class="btn-group" style="justify-content:center; margin-top:2rem;">
+                            <button class="btn-secondary" onclick="resetGuidedCompare()">Start Over</button>
+                            <button class="btn-primary" id="gcExploreBtn">Explore Branches</button>
                         </div>
                     </div>
                 </div>
@@ -5965,7 +6146,8 @@
                 quizIndex: 0,
                 quizScores: {},
                 quizRef: [], // Store personalized strings for results
-                history: [] // Stack of screen IDs for back navigation
+                history: [], // Stack of screen IDs for back navigation
+                answers: new Array(30).fill(null) // NEW: Track individual answers
             };
 
             const assessmentQuestions = [
@@ -5973,300 +6155,300 @@
                     text: "When solving a problem, you like to:",
                     desc: "Choose the method that feels most natural to you.",
                     options: [
-                        { text: "Use computer and think logically", ref: "you enjoy logical problem solving on computers", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Work with tools or machines", ref: "you have a knack for machines and tools", score: { mech: 15, auto: 15, aero: 12 } },
-                        { text: "Design buildings or plans", ref: "you are a natural designer of physical structures", score: { civil: 15, env: 12, agri: 10 } },
-                        { text: "Study and analyze deeply", ref: "you thrive on deep analysis and systems", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Use computer logic", personalize: "you enjoy logical problem solving on computers", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Fix physical machines", personalize: "you have a knack for machines and tools", scores: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Design building plans", personalize: "you are a natural designer of physical structures", scores: { civil: 15, env: 12, agri: 10 } },
+                        { text: "Deep systems analysis", personalize: "you thrive on deep analysis and systems", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "In school, you enjoyed:",
                     desc: "Recall your favorite hands-on memories.",
                     options: [
-                        { text: "Computer lab", ref: "you were a star in the computer lab", score: { cs: 15, it: 15, cyber: 10 } },
-                        { text: "Physics lab", ref: "you excelled in physics and electronics", score: { ec: 15, ee: 15, robot: 12 } },
-                        { text: "Workshop practice", ref: "you loved working in the machine workshop", score: { mech: 15, prod: 15, auto: 12 } },
-                        { text: "Drawing or design", ref: "you enjoyed design and drafting", score: { civil: 15, fashion: 12, textile: 12 } }
+                        { text: "Coding in lab", personalize: "you were a star in the computer lab", scores: { cs: 15, it: 15, cyber: 10 } },
+                        { text: "Physics circuit experiments", personalize: "you excelled in physics and electronics", scores: { ec: 15, ee: 15, robot: 12 } },
+                        { text: "Industrial workshop practice", personalize: "you loved working in the machine workshop", scores: { mech: 15, prod: 15, auto: 12 } },
+                        { text: "Drawing project designs", personalize: "you enjoyed design and drafting", scores: { civil: 15, fashion: 12, textile: 12 } }
                     ]
                 },
                 {
                     text: "Your favorite type of work would be:",
                     desc: "Envision your ideal daily routine.",
                     options: [
-                        { text: "Sitting with computer", ref: "you prefer an IT-focused desk job", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Working with machines", ref: "you want to be around active machinery", score: { mech: 15, auto: 15, prod: 15 } },
-                        { text: "Visiting sites and projects", ref: "you like being on-site for physical projects", score: { civil: 15, env: 12, agri: 12 } },
-                        { text: "Researching new ideas", ref: "you are driven by research and innovation", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Coding at desk", personalize: "you prefer an IT-focused desk job", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Handling heavy machinery", personalize: "you want to be around active machinery", scores: { mech: 15, auto: 15, prod: 15 } },
+                        { text: "Visiting project sites", personalize: "you like being on-site for physical projects", scores: { civil: 15, env: 12, agri: 12 } },
+                        { text: "Lab-based research work", personalize: "you are driven by research and innovation", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "You feel strong in:",
                     desc: "Identify your core natural talent.",
                     options: [
-                        { text: "Logical thinking", ref: "logic is your primary mental tool", score: { cs: 15, it: 15, math: 12 } },
-                        { text: "Practical work", ref: "you're a hands-on technical worker", score: { mech: 15, auto: 15, prod: 12 } },
-                        { text: "Planning & structure", ref: "you're a master of organization and structure", score: { civil: 15, env: 12, agri: 12 } },
-                        { text: "Analytical thinking", ref: "you excel at breaking down complex data", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Logical code thinking", personalize: "logic is your primary mental tool", scores: { cs: 15, it: 15, math: 12 } },
+                        { text: "Hands-on technical work", personalize: "you're a hands-on technical worker", scores: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Organizing large structures", personalize: "you're a master of organization and structure", scores: { civil: 15, env: 12, agri: 12 } },
+                        { text: "Complex data analysis", personalize: "you excel at breaking down complex data", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "What excites you more?",
                     desc: "The type of project that ignites your passion.",
                     options: [
-                        { text: "Creating an app", ref: "you're an aspiring app developer", score: { cs: 15, it: 15, ai: 10 } },
-                        { text: "Fixing an engine", ref: "you're a pro at engine mechanics", score: { auto: 15, mech: 15, aero: 12 } },
-                        { text: "Designing a building", ref: "you have the vision of an architect", score: { civil: 15, env: 12, agri: 10 } },
-                        { text: "Building smart systems", ref: "you're building the brain of future tech", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Building mobile apps", personalize: "you're an aspiring app developer", scores: { cs: 15, it: 15, ai: 10 } },
+                        { text: "Tuning car engines", personalize: "you're a pro at engine mechanics", scores: { auto: 15, mech: 15, aero: 12 } },
+                        { text: "Structural design projects", personalize: "you have the vision of an architect", scores: { civil: 15, env: 12, agri: 10 } },
+                        { text: "Designing smart robots", personalize: "you're building the brain of future tech", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "You prefer learning by:",
                     desc: "How do you naturally process information?",
                     options: [
-                        { text: "Practicing on computer", ref: "you learn best through digital practice", score: { cs: 15, it: 15, cyber: 10 } },
-                        { text: "Doing physical work", ref: "you're a hands-on physical learner", score: { mech: 15, auto: 15, prod: 12 } },
-                        { text: "Drawing and planning", ref: "you learn by visualizing and drafting", score: { civil: 15, fashion: 12, textile: 12 } },
-                        { text: "Reading and analyzing", ref: "you're a deep analytical researcher", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Digital software practice", personalize: "you learn best through digital practice", scores: { cs: 15, it: 15, cyber: 10 } },
+                        { text: "Using technical tools", personalize: "you're a hands-on physical learner", scores: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Visualizing structural plans", personalize: "you learn by visualizing and drafting", scores: { civil: 15, fashion: 12, textile: 12 } },
+                        { text: "Deep research study", personalize: "you're a deep analytical researcher", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "Your dream workplace:",
                     desc: "Where you see yourself in 5 years.",
                     options: [
-                        { text: "IT office", ref: "you belong in a fast-paced tech firm", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Factory", ref: "the heart of industry is where you belong", score: { prod: 15, mech: 15, auto: 12 } },
-                        { text: "Construction site", ref: "you want to build massive landmarks", score: { civil: 15, env: 12, architecture: 12 } },
-                        { text: "Research lab", ref: "you are a pioneer of innovation labs", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Modern tech office", personalize: "you belong in a fast-paced tech firm", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Large industrial factory", personalize: "the heart of industry is where you belong", scores: { prod: 15, mech: 15, auto: 12 } },
+                        { text: "Active building site", personalize: "you want to build massive landmarks", scores: { civil: 15, env: 12, architecture: 12 } },
+                        { text: "Scientific innovation lab", personalize: "you are a pioneer of innovation labs", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "If something stops working, you:",
                     desc: "Your instinctive approach to troubleshooting.",
                     options: [
-                        { text: "Debug software", ref: "you're a digital troubleshootings expert", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Open and check parts", ref: "you're a mechanical investigator", score: { mech: 15, auto: 15, aero: 12 } },
-                        { text: "Check structure/design", ref: "you look for foundational structural faults", score: { civil: 15, env: 12, agri: 10 } },
-                        { text: "Study the system logic", ref: "you analyze system-wide patterns", score: { ai: 15, ec: 15, ee: 12 } }
+                        { text: "Fix software bugs", personalize: "you're a digital troubleshootings expert", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Check mechanical parts", personalize: "you're a mechanical investigator", scores: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Inspect structural faults", personalize: "you look for foundational structural faults", scores: { civil: 15, env: 12, agri: 10 } },
+                        { text: "Analyze system data", personalize: "you analyze system-wide patterns", scores: { ai: 15, ec: 15, ee: 12 } }
                     ]
                 },
                 {
                     text: "You like problems that involve:",
                     desc: "The category of hurdles you enjoy clearing.",
                     options: [
-                        { text: "Coding", ref: "digital coding challenges are your forte", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Machines", ref: "mechanical machine problems excite you", score: { mech: 15, auto: 15, prod: 12 } },
-                        { text: "Structures", ref: "building structural challenges are your pick", score: { civil: 15, env: 12, agri: 10 } },
-                        { text: "Data or systems", ref: "you master complex data and system logic", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Coding digital puzzles", personalize: "digital coding challenges are your forte", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Mechanical tool problems", personalize: "mechanical machine problems excite you", scores: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Large physical structures", personalize: "building structural challenges are your pick", scores: { civil: 15, env: 12, agri: 10 } },
+                        { text: "Intelligent data systems", personalize: "you master complex data and system logic", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "In free time, you would:",
                     desc: "What catches your attention during leisure?",
                     options: [
-                        { text: "Learn new software", ref: "you spend free time on software tech", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Watch machine videos", ref: "you're into mechanical inventions on video", score: { mech: 15, auto: 15, aero: 12 } },
-                        { text: "See building designs", ref: "you're curious about architectural visuals", score: { civil: 15, env: 12, architecture: 15 } },
-                        { text: "Learn about AI or smart tech", ref: "you're excited by AI and the future", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Explore new software", personalize: "you spend free time on software tech", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Watch machine videos", personalize: "you're into mechanical inventions on video", scores: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Study building designs", personalize: "you're curious about architectural visuals", scores: { civil: 15, env: 12, architecture: 15 } },
+                        { text: "Read AI news", personalize: "you're excited by AI and the future", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "You are more comfortable:",
                     desc: "Your characteristic work style.",
                     options: [
-                        { text: "Working long time on computer", ref: "you have high digital stamina", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Working with tools", ref: "you're a wizard with heavy tools", score: { mech: 15, auto: 15, prod: 12 } },
-                        { text: "Working outdoors", ref: "the open air is your preferred workstation", score: { civil: 15, agri: 15, env: 12 } },
-                        { text: "Doing research work", ref: "you're at home in research environments", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Long computer sessions", personalize: "you have high digital stamina", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Handling heavy tools", personalize: "you're a wizard with heavy tools", scores: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Working on-site outdoors", personalize: "the open air is your preferred workstation", scores: { civil: 15, agri: 15, env: 12 } },
+                        { text: "Scientific lab research", personalize: "you're at home in research environments", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "What gives you satisfaction?",
                     desc: "What makes you feel truly accomplished?",
                     options: [
-                        { text: "Solving logical puzzles", ref: "logical puzzles give you great pride", score: { cs: 15, it: 12, ai: 12 } },
-                        { text: "Repairing equipment", ref: "you're the go-to person for repairs", score: { mech: 15, auto: 15, ee: 10 } },
-                        { text: "Designing strong structures", ref: "you build structures that last eternity", score: { civil: 15, env: 12, architecture: 15 } },
-                        { text: "Improving smart systems", ref: "you're a master of technological efficiency", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Solving code errors", personalize: "logical puzzles give you great pride", scores: { cs: 15, it: 12, ai: 12 } },
+                        { text: "Fixing broken equipment", personalize: "you're the go-to person for repairs", scores: { mech: 15, auto: 15, ee: 10 } },
+                        { text: "Creating strong structures", personalize: "you build structures that last eternity", scores: { civil: 15, env: 12, architecture: 15 } },
+                        { text: "Building smart tech", personalize: "you're a master of technological efficiency", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "Your friends say you are:",
                     desc: "How others perceive your natural role.",
                     options: [
-                        { text: "Tech smart", ref: "you've earned a 'tech-smart' reputation", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Practical person", ref: "others see you as a practical fix-it person", score: { mech: 15, auto: 15, civil: 12 } },
-                        { text: "Good planner", ref: "you're the designated planner in your group", score: { civil: 15, prod: 15, env: 12 } },
-                        { text: "Deep thinker", ref: "people respect your deep analytical mind", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Tech savvy thinker", personalize: "you've earned a 'tech-smart' reputation", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Practical hands-on worker", personalize: "others see you as a practical fix-it person", scores: { mech: 15, auto: 15, civil: 12 } },
+                        { text: "Organized project planner", personalize: "you're the designated planner in your group", scores: { civil: 15, prod: 15, env: 12 } },
+                        { text: "Deep analytical mind", personalize: "people respect your deep analytical mind", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "When learning something new:",
                     desc: "How you approach a new topic.",
                     options: [
-                        { text: "Try coding it", ref: "you learn through coding it yourself", score: { cs: 15, it: 15, ai: 12 } },
-                        { text: "Try building it", ref: "you learn by building physical models", score: { mech: 15, auto: 15, robot: 12 } },
-                        { text: "Draw and plan it", ref: "you learn by drafting it on paper", score: { civil: 15, fashion: 12, textile: 12 } },
-                        { text: "Study and understand fully", ref: "you are a master of fundamental principles", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Try coding first", personalize: "you learn through coding it yourself", scores: { cs: 15, it: 15, ai: 12 } },
+                        { text: "Build physical models", personalize: "you learn by building physical models", scores: { mech: 15, auto: 15, robot: 12 } },
+                        { text: "Draft design plans", personalize: "you learn by drafting it on paper", scores: { civil: 15, fashion: 12, textile: 12 } },
+                        { text: "Study core principles", personalize: "you are a master of fundamental principles", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "Which place feels comfortable?",
                     desc: "Identify your ideal professional habitat.",
                     options: [
-                        { text: "Software company", ref: "you belong in a high-tech software house", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Industrial area", ref: "you're comfortable in industrial production zones", score: { prod: 15, mech: 15, auto: 12 } },
-                        { text: "Building project site", ref: "the site of a building project is your workspace", score: { civil: 15, env: 12, architecture: 15 } },
-                        { text: "Innovation center", ref: "you thrive in centers of creative innovation", score: { ai: 15, robot: 15, aero: 12 } }
+                        { text: "Software development firm", personalize: "you belong in a high-tech software house", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Busy industrial factory", personalize: "you're comfortable in industrial production zones", scores: { prod: 15, mech: 15, auto: 12 } },
+                        { text: "Massive construction site", personalize: "the site of a building project is your workspace", scores: { civil: 15, env: 12, architecture: 15 } },
+                        { text: "Creative research center", personalize: "you thrive in centers of creative innovation", scores: { ai: 15, robot: 15, aero: 12 } }
                     ]
                 },
                 {
                     text: "You prefer a job that:",
                     desc: "Your core work-life preference.",
                     options: [
-                        { text: "Can be done remotely", ref: "you value remote and digital flexibility", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Needs physical work", ref: "you thrive on physical technical labor", score: { mech: 15, auto: 15, prod: 12 } },
-                        { text: "Involves field visits", ref: "you like work that takes you out into the field", score: { civil: 15, agri: 15, env: 12 } },
-                        { text: "Needs research", ref: "you're a natural research and development hire", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Remote work flexibility", personalize: "you value remote and digital flexibility", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Skilled physical labor", personalize: "you thrive on physical technical labor", scores: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Diverse field visits", personalize: "you like work that takes you out into the field", scores: { civil: 15, agri: 15, env: 12 } },
+                        { text: "Research driven growth", personalize: "you're a natural research and development hire", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "You enjoy:",
                     desc: "Your primary professional interest.",
                     options: [
-                        { text: "Digital work", ref: "you're a digital professional at heart", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Mechanical work", ref: "you're a master of mechanical works", score: { mech: 15, auto: 15, aero: 12 } },
-                        { text: "Structural work", ref: "you're built for structural engineering works", score: { civil: 15, env: 12, agri: 12 } },
-                        { text: "Intelligent systems", ref: "you're an architect of intelligent digital systems", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Digital software world", personalize: "you're a digital professional at heart", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Advanced mechanical tools", personalize: "you're a master of mechanical works", scores: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Global infrastructure projects", personalize: "you're built for structural engineering works", scores: { civil: 15, env: 12, agri: 12 } },
+                        { text: "Future intelligent systems", personalize: "you're an architect of intelligent digital systems", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "When making decisions, you use:",
                     desc: "Identify your primary decision-making tool.",
                     options: [
-                        { text: "Logic", ref: "pure logic is your guide for decisions", score: { cs: 15, it: 15, math: 12 } },
-                        { text: "Real experience", ref: "you base decisions on real-world experience", score: { mech: 15, auto: 15, prod: 12 } },
-                        { text: "Planning", ref: "careful planning is your decision-making base", score: { civil: 15, env: 12, architecture: 15 } },
-                        { text: "Data", ref: "data-driven decisions are your specialty", score: { ai: 15, chem: 15, biomed: 15 } }
+                        { text: "Clear mathematical logic", personalize: "pure logic is your guide for decisions", scores: { cs: 15, it: 15, math: 12 } },
+                        { text: "Direct hands-on experience", personalize: "you base decisions on real-world experience", scores: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Detailed project planning", personalize: "careful planning is your decision-making base", scores: { civil: 15, env: 12, architecture: 15 } },
+                        { text: "Complex data evidence", personalize: "data-driven decisions are your specialty", scores: { ai: 15, chem: 15, biomed: 15 } }
                     ]
                 },
                 {
                     text: "You see yourself as:",
                     desc: "Your core identity as a problem solver.",
                     options: [
-                        { text: "Logical person", ref: "you identify as a logical innovator", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Hands-on worker", ref: "you're essentially a hands-on mechanical worker", score: { mech: 15, auto: 15, aero: 12 } },
-                        { text: "Designer", ref: "you are primarily a physical designer", score: { civil: 15, fashion: 15, textile: 12 } },
-                        { text: "Analyst", ref: "you are a deep system analyst", score: { ai: 15, math: 15, ec: 12 } }
+                        { text: "Digital logic innovator", personalize: "you identify as a logical innovator", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Mechanical hardware expert", personalize: "you're essentially a hands-on mechanical worker", scores: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Physical structural designer", personalize: "you are primarily a physical designer", scores: { civil: 15, fashion: 15, textile: 12 } },
+                        { text: "Deep systems analyst", personalize: "you are a deep system analyst", scores: { ai: 15, math: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "If given a project, you choose:",
                     desc: "Your dream assignment.",
                     options: [
-                        { text: "Build a website", ref: "website creation is your preferred project", score: { it: 15, cs: 15, cyber: 12 } },
-                        { text: "Improve a machine", ref: "you'd rather spend time improving machinery", score: { mech: 15, auto: 15, prod: 15 } },
-                        { text: "Plan a building", ref: "planning a building is your ideal project", score: { civil: 15, env: 12, architecture: 15 } },
-                        { text: "Develop automation", ref: "you want to automate everything with AI", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Coding modern websites", personalize: "website creation is your preferred project", scores: { it: 15, cs: 15, cyber: 12 } },
+                        { text: "Improving machine power", personalize: "you'd rather spend time improving machinery", scores: { mech: 15, auto: 15, prod: 15 } },
+                        { text: "Planning architectural wonders", personalize: "planning a building is your ideal project", scores: { civil: 15, env: 12, architecture: 15 } },
+                        { text: "Developing AI automation", personalize: "you want to automate everything with AI", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "You prefer tasks that are:",
                     desc: "The nature of work you enjoy most.",
                     options: [
-                        { text: "Technology based", ref: "you live at the center of technology", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Tool based", ref: "you're a master of technical tools", score: { mech: 15, auto: 12, aero: 12 } },
-                        { text: "Structure based", ref: "you care about structural foundations", score: { civil: 15, architect: 12, env: 12 } },
-                        { text: "Research based", ref: "you're a pioneer of research fields", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Purely software based", personalize: "you live at the center of technology", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Using versatile tools", personalize: "you're a master of technical tools", scores: { mech: 15, auto: 12, aero: 12 } },
+                        { text: "Focused on structures", personalize: "you care about structural foundations", scores: { civil: 15, architect: 12, env: 12 } },
+                        { text: "Deep research science", personalize: "you're a pioneer of research fields", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "Which achievement makes you proud?",
                     desc: "The ultimate milestone.",
                     options: [
-                        { text: "Launching software", ref: "launching software products is your goal", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Designing engine", ref: "you want to design an iconic engine unit", score: { auto: 15, mech: 15, aero: 12 } },
-                        { text: "Building bridge", ref: "you'd like to build a landmark bridge", score: { civil: 15, env: 12, agri: 12 } },
-                        { text: "Creating smart robot", ref: "creating an intelligent robot is your aim", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Launching digital products", personalize: "launching software products is your goal", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Designing powerful engines", personalize: "you want to design an iconic engine unit", scores: { auto: 15, mech: 15, aero: 12 } },
+                        { text: "Building massive bridges", personalize: "you'd like to build a landmark bridge", scores: { civil: 15, env: 12, agri: 12 } },
+                        { text: "Creating smart robots", personalize: "creating an intelligent robot is your aim", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "Under pressure, you:",
                     desc: "Your characteristic reaction to stress.",
                     options: [
-                        { text: "Think logically", ref: "logic is your shield during pressure", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Act practically", ref: "you remain calm and act practically", score: { mech: 15, auto: 15, prod: 12 } },
-                        { text: "Plan carefully", ref: "you carefully pivot with a new plan", score: { civil: 15, prod: 15, env: 12 } },
-                        { text: "Analyze deeply before acting", ref: "you analyze every angle before acting", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Apply logical steps", personalize: "logic is your shield during pressure", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Take practical action", personalize: "you remain calm and act practically", scores: { mech: 15, auto: 15, prod: 12 } },
+                        { text: "Draft better plans", personalize: "you carefully pivot with a new plan", scores: { civil: 15, prod: 15, env: 12 } },
+                        { text: "Analyze every angle", personalize: "you analyze every angle before acting", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "You are interested in:",
                     desc: "Identify your primary curiosity.",
                     options: [
-                        { text: "Digital innovation", ref: "digital innovation drives your curiosity", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Mechanical systems", ref: "you are fascinated by mechanical systems", score: { mech: 15, auto: 15, aero: 12 } },
-                        { text: "Infrastructure", ref: "you care about the world's infrastructure", score: { civil: 15, env: 15, agri: 12 } },
-                        { text: "Artificial intelligence", ref: "you're obsessed with artificial intelligence", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Software tech innovation", personalize: "digital innovation drives your curiosity", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Moving mechanical parts", personalize: "you are fascinated by mechanical systems", scores: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Large urban infrastructure", personalize: "you care about the world's infrastructure", scores: { civil: 15, env: 15, agri: 12 } },
+                        { text: "Future intelligent systems", personalize: "you're obsessed with artificial intelligence", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "You imagine future job in:",
                     desc: "Where you see your career path landing.",
                     options: [
-                        { text: "IT company", ref: "you see yourself in a top IT company", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Manufacturing company", ref: "you see yourself leading manufacturing", score: { prod: 15, mech: 15, auto: 12 } },
-                        { text: "Construction company", ref: "you want to lead a construction firm", score: { civil: 15, architecture: 15, env: 12 } },
-                        { text: "Tech research company", ref: "you're destined for tech research", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Leading tech company", personalize: "you see yourself in a top IT company", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Major manufacturing plant", personalize: "you see yourself leading manufacturing", scores: { prod: 15, mech: 15, auto: 12 } },
+                        { text: "Urban construction firm", personalize: "you want to lead a construction firm", scores: { civil: 15, architecture: 15, env: 12 } },
+                        { text: "High end research lab", personalize: "you're destined for tech research", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "Which skill suits you?",
                     desc: "Identify your strongest suit.",
                     options: [
-                        { text: "Coding", ref: "coding is your most natural skill", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Machine handling", ref: "you have a natural hand for machines", score: { mech: 15, auto: 15, ee: 12 } },
-                        { text: "Design drawing", ref: "you're a master of structural design drawing", score: { civil: 15, architecture: 15, fashion: 12 } },
-                        { text: "Data analysis", ref: "you are a master of analytical data analysis", score: { ai: 15, math: 15, it: 12 } }
+                        { text: "Digital coding logic", personalize: "coding is your most natural skill", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Expert machine handling", personalize: "you have a natural hand for machines", scores: { mech: 15, auto: 15, ee: 12 } },
+                        { text: "Precise structural drawing", personalize: "you're a master of structural design drawing", scores: { civil: 15, architecture: 15, fashion: 12 } },
+                        { text: "Advanced data analysis", personalize: "you are a master of analytical data analysis", scores: { ai: 15, math: 15, it: 12 } }
                     ]
                 },
                 {
                     text: "You enjoy learning about:",
                     desc: "What keeps you reading and curious.",
                     options: [
-                        { text: "Software updates", ref: "you're always reading software updates", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Machine parts", ref: "you're curious about mechanical parts", score: { mech: 15, auto: 15, aero: 12 } },
-                        { text: "Building materials", ref: "you're interested in building material science", score: { civil: 15, env: 12, architecture: 12 } },
-                        { text: "Smart technology", ref: "you're fascinated by smart technologies", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "New software features", personalize: "you're always reading software updates", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Mechanical gear systems", personalize: "you're curious about mechanical parts", scores: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Durable building items", personalize: "you're interested in building material science", scores: { civil: 15, env: 12, architecture: 12 } },
+                        { text: "Future smart tech", personalize: "you're fascinated by smart technologies", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 },
                 {
                     text: "If a system fails, you:",
                     desc: "Your troubleshooting specialty.",
                     options: [
-                        { text: "Check program", ref: "you go straight to checking the program code", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Check machine", ref: "you go straight to checking the machine parts", score: { mech: 15, auto: 15, aero: 12 } },
-                        { text: "Check structure", ref: "you go straight to checking the structure", score: { civil: 15, env: 12, architecture: 12 } },
-                        { text: "Check logic", ref: "you go straight to checking the systemic logic", score: { ai: 15, math: 15, ec: 12 } }
+                        { text: "Checking program code", personalize: "you go straight to checking the program code", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Inspecting hardware parts", personalize: "you go straight to checking the machine parts", scores: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Finding design flaws", personalize: "you go straight to checking the structure", scores: { civil: 15, env: 12, architecture: 12 } },
+                        { text: "Reviewing logic patterns", personalize: "you go straight to checking the systemic logic", scores: { ai: 15, math: 15, ec: 12 } }
                     ]
                 },
                 {
-                    text: "You prefer:",
+                    text: "You prefer tasks that are:",
                     desc: "Your primary work preference.",
                     options: [
-                        { text: "Computer-based work", ref: "you are a computer-based professional", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Hands-on physical work", ref: "you prefer hands-on physical labor", score: { mech: 15, auto: 15, prod: 15 } },
-                        { text: "Field work", ref: "you like being in the field", score: { civil: 15, agri: 15, env: 12 } },
-                        { text: "Research work", ref: "you are purely a research professional", score: { ai: 15, biomed: 15, chem: 15 } }
+                        { text: "Desk based digital work", personalize: "you are a computer-based professional", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Physical shop floor work", personalize: "you prefer hands-on physical labor", scores: { mech: 15, auto: 15, prod: 15 } },
+                        { text: "Outdoor project visits", personalize: "you like being in the field", scores: { civil: 15, agri: 15, env: 12 } },
+                        { text: "Dedicated research hours", personalize: "you are purely a research professional", scores: { ai: 15, biomed: 15, chem: 15 } }
                     ]
                 },
                 {
                     text: "Which work feels natural to you?",
                     desc: "Identify your true professional home.",
                     options: [
-                        { text: "Digital & software", ref: "digital and software work is your home", score: { cs: 15, it: 15, cyber: 12 } },
-                        { text: "Machines & tools", ref: "machines and tools feel most natural", score: { mech: 15, auto: 15, aero: 12 } },
-                        { text: "Buildings & sites", ref: "buildings and project sites are your home", score: { civil: 15, env: 15, architecture: 12 } },
-                        { text: "Smart systems & analysis", ref: "smart systems and deep analysis is your world", score: { ai: 15, robot: 15, ec: 12 } }
+                        { text: "Digital software world", personalize: "digital and software work is your home", scores: { cs: 15, it: 15, cyber: 12 } },
+                        { text: "Hardwares and machines", personalize: "machines and tools feel most natural", scores: { mech: 15, auto: 15, aero: 12 } },
+                        { text: "Buildings and project sites", personalize: "buildings and project sites are your home", scores: { civil: 15, env: 15, architecture: 12 } },
+                        { text: "Logic and analysis world", personalize: "smart systems and deep analysis is your world", scores: { ai: 15, robot: 15, ec: 12 } }
                     ]
                 }
             ];
@@ -6347,16 +6529,30 @@
             }
 
             function navigateToAssessmentScreen(screenId) {
-                const screens = ['academicProfile', 'goalSelection', 'modeSelection', 'interestQuiz', 'branchSelector', 'resultContainer'];
+                // NEW: Reset and populate history/visibility for all possible screens
+                const screens = ['academicProfile', 'modeSelection', 'goalSelection', 'interestQuiz', 'resultContainer', 'guidedCompareResults'];
+
                 screens.forEach(s => {
                     const el = document.getElementById(s);
-                    if (el) el.style.display = s === screenId ? 'block' : 'none';
+                    if (el) el.style.display = (s === screenId) ? 'block' : 'none';
                 });
 
-                if (!currentAssessment.history.includes(screenId)) {
+                // Navbar highlight
+                if (screenId === 'interestQuiz' || screenId === 'resultContainer') {
+                    document.getElementById('assessmentBackNav').style.display = 'flex';
+                    // Ensure the jump grid is also considered
+                    if (screenId === 'interestQuiz') {
+                        document.getElementById('quizNavigationContainer').style.display = 'block';
+                    }
+                } else {
+                    document.getElementById('assessmentBackNav').style.display = 'none';
+                }
+
+                if (currentAssessment.history[currentAssessment.history.length - 1] !== screenId) {
                     currentAssessment.history.push(screenId);
                 }
-                updateAssessmentNav(screenId);
+
+                updateAssessmentNav();
             }
 
             function handleAssessmentBack() {
@@ -6372,6 +6568,222 @@
                     }
 
                     navigateToAssessmentScreen(prevScreen);
+                }
+            }
+
+            function proceedToDiscovery() {
+                // Capture marks
+                currentAssessment.academic.marks = {
+                    math: parseInt(document.getElementById('markMath').value) || 0,
+                    physics: parseInt(document.getElementById('markPhysics').value) || 0,
+                    chem: parseInt(document.getElementById('markChem').value) || 0,
+                    cs: parseInt(document.getElementById('markCS').value) || 0,
+                    overall: parseInt(document.getElementById('markOverall').value) || 0
+                };
+
+                // Validate basic marks
+                if (!currentAssessment.academic.marks.math || !currentAssessment.academic.marks.physics) {
+                    alert("Please enter at least Mathematics and Physics marks.");
+                    return;
+                }
+
+                currentAssessment.mode = 'discovery';
+                startInterestQuiz();
+            }
+
+            // ===== Guided Compare Module Functions =====
+
+            function setGCAcademicGroup(group) {
+                currentAssessment.academic.group = group;
+                document.getElementById('gcGroupMath').classList.toggle('active', group === 'math');
+                document.getElementById('gcGroupCS').classList.toggle('active', group === 'cs');
+                document.getElementById('gcCSMarkField').style.display = group === 'cs' ? 'block' : 'none';
+            }
+
+            function proceedToGCBranchSelector() {
+                // Capture marks
+                currentAssessment.academic.marks = {
+                    math: parseInt(document.getElementById('gcMarkMath').value) || 0,
+                    physics: parseInt(document.getElementById('gcMarkPhysics').value) || 0,
+                    chem: parseInt(document.getElementById('gcMarkChem').value) || 0,
+                    cs: parseInt(document.getElementById('gcMarkCS').value) || 0,
+                    overall: parseInt(document.getElementById('gcMarkOverall').value) || 0
+                };
+
+                // Validate
+                if (!currentAssessment.academic.marks.math || !currentAssessment.academic.marks.physics) {
+                    alert("Please enter at least Mathematics and Physics marks.");
+                    return;
+                }
+
+                currentAssessment.mode = 'comparison';
+                currentAssessment.selectedCompareBranches = []; // Reset selections
+
+                // Render chips
+                const cont = document.getElementById('gcComparisonBranchChips');
+                cont.innerHTML = '';
+                for (let key in branchMapping) {
+                    const chip = document.createElement('div');
+                    chip.className = 'branch-chip-input';
+                    chip.innerText = branchMapping[key].name;
+                    chip.onclick = () => toggleGCComparisonBranch(key, chip);
+                    cont.appendChild(chip);
+                }
+
+                updateGCStartComparisonBtn();
+
+                // Show screen
+                document.getElementById('gcAcademicProfile').style.display = 'none';
+                document.getElementById('gcBranchSelector').style.display = 'block';
+                document.getElementById('gcBackNav').style.display = 'flex';
+
+                // Update Step Indicators
+                document.getElementById('gcStep1').classList.add('active');
+                document.getElementById('gcStep2').classList.remove('active');
+            }
+
+            function toggleGCComparisonBranch(key, el) {
+                const idx = currentAssessment.selectedCompareBranches.indexOf(key);
+                if (idx >= 0) {
+                    currentAssessment.selectedCompareBranches.splice(idx, 1);
+                    el.classList.remove('selected');
+                } else {
+                    if (currentAssessment.selectedCompareBranches.length < 3) {
+                        currentAssessment.selectedCompareBranches.push(key);
+                        el.classList.add('selected');
+                    } else {
+                        alert("Please select up to 3 branches for comparison.");
+                    }
+                }
+                updateGCStartComparisonBtn();
+            }
+
+            function updateGCStartComparisonBtn() {
+                const btn = document.getElementById('gcStartComparisonBtn');
+                const count = currentAssessment.selectedCompareBranches.length;
+                btn.disabled = count < 2;
+                btn.innerText = count < 2 ? 'Select at least 2 branches' : 'Show Comparison Guidance';
+            }
+
+            function showGCResults() {
+                document.getElementById('gcBranchSelector').style.display = 'none';
+                document.getElementById('gcResultContainer').style.display = 'block';
+                document.getElementById('gcStep2').classList.add('active');
+
+                // Calculate scores (similar to showAssessmentResults)
+                const marks = currentAssessment.academic.marks;
+                const userCutoff = marks.math + (marks.physics / 2) + (marks.chem / 2);
+
+                const scores = {};
+                for (let k in branchMapping) scores[k] = 0;
+
+                // Simple weighted scoring for comparison
+                scores.cs = (marks.math * 0.4 + marks.cs * 0.6);
+                scores.ai = (marks.math * 0.6 + marks.cs * 0.4);
+                scores.it = (marks.math * 0.3 + marks.cs * 0.7);
+                scores.cyber = (marks.math * 0.5 + marks.cs * 0.5);
+                scores.ec = (marks.math * 0.5 + marks.physics * 0.5);
+                scores.ee = (marks.math * 0.4 + marks.physics * 0.6);
+                scores.mech = (marks.physics * 0.7 + marks.math * 0.3);
+                scores.civil = (marks.physics * 0.6 + marks.math * 0.4);
+                scores.auto = (marks.physics * 0.8 + marks.math * 0.2);
+                scores.aero = (marks.math * 0.8 + marks.physics * 0.2);
+                scores.robot = (marks.math * 0.6 + marks.physics * 0.4);
+                scores.chem = (marks.chem * 0.8 + marks.math * 0.2);
+                scores.food = (marks.chem * 0.7 + marks.math * 0.3);
+                scores.petro = (marks.chem * 0.6 + marks.math * 0.4);
+                scores.biomed = (marks.chem * 0.5 + marks.physics * 0.5);
+                scores.agri = (marks.math * 0.4 + (marks.physics + marks.chem) / 4);
+                scores.prod = (marks.math * 0.5 + marks.physics * 0.5);
+                scores.fashion = (marks.math * 0.3 + marks.physics * 0.3 + 40);
+                scores.textile = (marks.math * 0.3 + marks.physics * 0.3 + 40);
+                scores.env = (marks.chem * 0.4 + marks.physics * 0.4 + marks.math * 0.2);
+
+                // Find best among selected
+                let maxScore = -1;
+                let bestKey = currentAssessment.selectedCompareBranches[0];
+                currentAssessment.selectedCompareBranches.forEach(key => {
+                    if (scores[key] > maxScore) {
+                        maxScore = scores[key];
+                        bestKey = key;
+                    }
+                });
+
+                const rec = branchMapping[bestKey];
+                document.getElementById('gcResultBranch').innerText = rec.name;
+                document.getElementById('gcResultDesc').innerText = `Based on your profile, ${rec.name} seems like your strongest match among the choices.`;
+
+                // Tags
+                const tagsCont = document.getElementById('gcResultTags');
+                tagsCont.innerHTML = (rec.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+
+                // Breakdown
+                const list = document.getElementById('gcBreakdownList');
+                list.innerHTML = '';
+                const sortedCompare = [...currentAssessment.selectedCompareBranches].sort((a, b) => scores[b] - scores[a]);
+                const totalSelectedScore = sortedCompare.reduce((sum, k) => sum + (scores[k] || 0), 0) || 1;
+
+                sortedCompare.forEach(key => {
+                    const score = scores[key];
+                    const percentage = Math.round((score / totalSelectedScore) * 100);
+                    const item = document.createElement('div');
+                    item.className = 'breakdown-item';
+                    item.innerHTML = `
+                        <div class="breakdown-header">
+                            <span class="breakdown-label">${branchMapping[key].name}</span>
+                            <span class="breakdown-percentage">${percentage}% Match</span>
+                        </div>
+                        <div class="breakdown-bar-bg">
+                            <div class="breakdown-bar-fill" style="width: ${percentage}%"></div>
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+
+                // Tips
+                const tipsList = document.getElementById('gcImprovementTipsList');
+                const topSubject = Object.entries({ Math: marks.math, Physics: marks.physics, Chemistry: marks.chem, CS: marks.cs }).sort((a, b) => b[1] - a[1])[0][0];
+                tipsList.innerHTML = generateImprovementTips(userCutoff, topSubject, bestKey).map(t => `<div class="tip-item">• ${t}</div>`).join('');
+
+                // Related
+                const relatedCont = document.getElementById('gcRelatedCoursesList');
+                relatedCont.innerHTML = (relatedCoursesData[bestKey] || []).map(rel => {
+                    const course = branchMapping[rel.key];
+                    return `
+                        <div class="related-course-card">
+                            <div class="related-course-header"><strong>${course.name}</strong> <span class="related-why-tag">${rel.why}</span></div>
+                            <p class="related-desc">${rel.desc}</p>
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('gcExploreBtn').onclick = () => {
+                    switchTab('courses');
+                    document.getElementById('courseSearch').value = rec.name;
+                    renderCourseInsights();
+                };
+            }
+
+            function resetGuidedCompare() {
+                document.getElementById('gcResultContainer').style.display = 'none';
+                document.getElementById('gcBranchSelector').style.display = 'none';
+                document.getElementById('gcAcademicProfile').style.display = 'block';
+                document.getElementById('gcBackNav').style.display = 'none';
+                document.getElementById('gcStep1').classList.remove('active');
+                document.getElementById('gcStep2').classList.remove('active');
+                currentAssessment.selectedCompareBranches = [];
+            }
+
+            function handleGCBack() {
+                if (document.getElementById('gcResultContainer').style.display === 'block') {
+                    document.getElementById('gcResultContainer').style.display = 'none';
+                    document.getElementById('gcBranchSelector').style.display = 'block';
+                    document.getElementById('gcStep2').classList.remove('active');
+                } else if (document.getElementById('gcBranchSelector').style.display === 'block') {
+                    document.getElementById('gcBranchSelector').style.display = 'none';
+                    document.getElementById('gcAcademicProfile').style.display = 'block';
+                    document.getElementById('gcBackNav').style.display = 'none';
+                    document.getElementById('gcStep1').classList.remove('active');
                 }
             }
 
@@ -6456,7 +6868,10 @@
                 currentAssessment.quizIndex = 0;
                 currentAssessment.quizScores = {};
                 currentAssessment.quizRef = [];
-                for (let k in branchMapping) currentAssessment.quizScores[k] = 0;
+                // Only reset answers if necessary, or ensure it's initialized
+                if (!currentAssessment.answers || currentAssessment.answers.length !== assessmentQuestions.length) {
+                    currentAssessment.answers = new Array(assessmentQuestions.length).fill(null);
+                }
                 renderInterestQuiz();
                 navigateToAssessmentScreen('interestQuiz');
             }
@@ -6464,55 +6879,95 @@
             function renderInterestQuiz() {
                 const q = assessmentQuestions[currentAssessment.quizIndex];
                 const total = assessmentQuestions.length;
-                const progress = ((currentAssessment.quizIndex) / total) * 100;
+                const progressPercent = Math.round(((currentAssessment.quizIndex) / total) * 100);
 
+                // Update text and progress bar
                 document.getElementById('quizStepText').innerText = `Question ${currentAssessment.quizIndex + 1} of ${total}`;
-                document.getElementById('quizPercentText').innerText = `${Math.round(progress)}% Complete`;
-                document.getElementById('quizProgressBar').style.width = `${progress}%`;
+                document.getElementById('quizPercentText').innerText = `${progressPercent}% Complete`;
+                document.getElementById('quizProgressBar').style.width = `${progressPercent}%`;
+
+                // Update question and description
                 document.getElementById('quizQuestion').innerText = q.text;
                 document.getElementById('quizDesc').innerText = q.desc;
 
-                const optionsCont = document.getElementById('quizOptions');
-                optionsCont.innerHTML = '';
+                const optionsContainer = document.getElementById('quizOptions');
+                optionsContainer.innerHTML = '';
 
                 q.options.forEach((opt, idx) => {
                     const btn = document.createElement('div');
                     btn.className = 'quiz-option';
+                    // Highlight selected option if it exists
+                    if (currentAssessment.answers[currentAssessment.quizIndex] === idx) {
+                        btn.classList.add('selected');
+                    }
                     btn.innerHTML = `
                         <h5>${opt.text}</h5>
-                        <p>Select this if it's most like you</p>
                     `;
                     btn.onclick = () => selectQuizOption(idx);
-                    optionsCont.appendChild(btn);
+                    optionsContainer.appendChild(btn);
                 });
+
+                renderQuestionNav();
+            }
+
+            function renderQuestionNav() {
+                const navContainer = document.getElementById('quizNavigationContainer');
+                const grid = document.getElementById('quizNavGrid');
+
+                if (currentAssessment.history[currentAssessment.history.length - 1] !== 'interestQuiz') {
+                    navContainer.style.display = 'none';
+                    return;
+                }
+
+                navContainer.style.display = 'block';
+                grid.innerHTML = '';
+
+                for (let i = 0; i < assessmentQuestions.length; i++) {
+                    const btn = document.createElement('div');
+                    btn.className = 'quiz-nav-btn';
+                    btn.innerText = i + 1;
+
+                    if (i === currentAssessment.quizIndex) {
+                        btn.classList.add('active');
+                    }
+
+                    if (currentAssessment.answers[i] !== null) {
+                        btn.classList.add('answered');
+                    }
+
+                    btn.onclick = () => jumpToQuestion(i);
+                    grid.appendChild(btn);
+                }
+            }
+
+            function jumpToQuestion(index) {
+                currentAssessment.quizIndex = index;
+                renderInterestQuiz();
             }
 
             function selectQuizOption(idx) {
-                const q = assessmentQuestions[currentAssessment.quizIndex];
-                const opt = q.options[idx];
+                // Save answer instead of just scoring
+                currentAssessment.answers[currentAssessment.quizIndex] = idx;
 
-                // Accumulate scores
-                for (let k in opt.score) {
-                    if (currentAssessment.quizScores[k] !== undefined) {
-                        currentAssessment.quizScores[k] += opt.score[k];
+                // Show selection immediately
+                renderInterestQuiz();
+
+                // Small delay before moving to next for better UX
+                setTimeout(() => {
+                    if (currentAssessment.quizIndex < assessmentQuestions.length - 1) {
+                        currentAssessment.quizIndex++;
+                        renderInterestQuiz();
+                    } else {
+                        // Check if all questions are answered
+                        const unansweredCount = currentAssessment.answers.filter(a => a === null).length;
+                        if (unansweredCount > 0) {
+                            alert(`You have ${unansweredCount} unanswered questions. Please answer all questions before seeing results.`);
+                            renderQuestionNav(); // Re-render nav to show unanswered
+                        } else {
+                            showAssessmentResults();
+                        }
                     }
-                }
-
-                // Store preference for result personalization
-                if (opt.ref) currentAssessment.quizRef.push(opt.ref);
-
-                currentAssessment.quizIndex++;
-
-                if (currentAssessment.quizIndex < assessmentQuestions.length) {
-                    renderInterestQuiz();
-                } else {
-                    // Quiz finished!
-                    document.getElementById('quizProgressBar').style.width = `100%`;
-                    document.getElementById('quizPercentText').innerText = `100% Complete`;
-                    setTimeout(() => {
-                        showAssessmentResults();
-                    }, 500);
-                }
+                }, 300);
             }
 
             function showBranchSelector() {
@@ -6573,6 +7028,24 @@
 
             function showAssessmentResults() {
                 navigateToAssessmentScreen('resultContainer');
+
+                // Reset scores before recalculating from individual answers
+                currentAssessment.quizScores = {};
+                currentAssessment.quizRef = [];
+
+                currentAssessment.answers.forEach((ansIdx, qIdx) => {
+                    if (ansIdx === null) return;
+                    const q = assessmentQuestions[qIdx];
+                    const opt = q.options[ansIdx];
+
+                    // Accumulate scores
+                    for (let branchKey in opt.scores) {
+                        currentAssessment.quizScores[branchKey] = (currentAssessment.quizScores[branchKey] || 0) + opt.scores[branchKey];
+                    }
+
+                    // Store preference for result personalization
+                    if (opt.personalize) currentAssessment.quizRef.push(opt.personalize);
+                });
 
                 const marks = currentAssessment.academic.marks;
                 const mode = currentAssessment.mode;
