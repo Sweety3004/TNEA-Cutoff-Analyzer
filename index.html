@@ -11,12 +11,7 @@
 </head>
 
 <body>
-    <div class="disclaimer-banner">
-        <div class="container">
-            <p><strong>Notice:</strong> This is a professional engineering guide based on 2024 academic data. This
-                platform is not affiliated with the official TNEA counseling authority.</p>
-        </div>
-    </div>
+
 
     <header class="navbar">
         <div class="container nav-content">
@@ -971,11 +966,24 @@
         </div>
 
         <div id="js-loading-indicator"
-            style="position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column;">
-            <h2>Loading Application...</h2>
-            <p>If this stays for more than 5 seconds, an error occurred.</p>
+            style="position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🎓</div>
+            <h2 style="margin-bottom: 0.5rem;">Loading Application...</h2>
+            <p style="color: #64748b;">If this stays for more than 5 seconds, an error occurred.</p>
             <div id="error-display"
-                style="color:red; margin-top:1rem; padding:1rem; border:1px solid red; max-width:80%; display:none;">
+                style="color: #dc2626; margin-top: 1.5rem; padding: 1rem; border: 1px solid #dc2626; border-radius: 8px; max-width: 80%; display: none; background: #fef2f2; font-size: 0.9rem;">
+            </div>
+            <button id="retry-button"
+                style="margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: none; font-weight: 600;"
+                onclick="window.location.reload()">
+                🔄 Retry Loading
+            </button>
+        </div>
+
+        <div class="disclaimer-banner">
+            <div class="container">
+                <p><strong>Notice:</strong> This is a professional engineering guide based on 2024 academic data. This
+                    platform is not affiliated with the official TNEA counseling authority.</p>
             </div>
         </div>
 

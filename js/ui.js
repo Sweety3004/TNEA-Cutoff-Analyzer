@@ -1,4 +1,4 @@
-import { appState } from './state.js';
+import { appState, authState } from './state.js';
 
 export function switchTab(tabId) {
     // Close mobile menu if open
@@ -41,6 +41,35 @@ export function switchTab(tabId) {
 export function hideLoadingIndicator() {
     const el = document.getElementById('js-loading-indicator');
     if (el) el.style.display = 'none';
+}
+
+export function renderUserArea() {
+    const userArea = document.getElementById('userArea');
+    if (!userArea) return;
+    if (authState.isLoggedIn && authState.user) {
+        userArea.innerHTML = `
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <span style="font-size:0.9rem; color:var(--text-muted);">Hi, <strong>${authState.user.name || authState.user.username}</strong></span>
+                <button class="btn-secondary" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="handleLogout()">Logout</button>
+            </div>`;
+    } else {
+        userArea.innerHTML = `<button class="btn-primary" style="padding:0.5rem 1.25rem; font-size:0.9rem;" onclick="showLoginModal()">Login</button>`;
+    }
+}
+
+export function updateFavBadge() {
+    const badge = document.getElementById('favCountBadge');
+    if (!badge) return;
+    const users = JSON.parse(localStorage.getItem('tnea_users') || '{}');
+    const favs = (authState.isLoggedIn && authState.user && users[authState.user.username])
+        ? (users[authState.user.username].favorites || [])
+        : [];
+    if (favs.length > 0) {
+        badge.textContent = favs.length;
+        badge.style.display = 'inline';
+    } else {
+        badge.style.display = 'none';
+    }
 }
 
 export function updateDashboardStats() {
