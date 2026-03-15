@@ -19,7 +19,7 @@ export function navigateToAssessmentScreen(screenId) {
     });
 
     const nav = document.getElementById('assessmentBackNav');
-    if (nav) nav.style.display = (screenId === 'interestQuiz' || screenId === 'resultContainer') ? 'flex' : 'none';
+    if (nav) nav.style.display = (screenId === 'interestQuiz') ? 'flex' : 'none';
 }
 
 export function setAcademicGroup(group) {
@@ -57,6 +57,12 @@ export function handleAssessmentBack() {
     });
     const idx = screenOrder.indexOf(currentScreen);
     if (idx > 0) navigateToAssessmentScreen(screenOrder[idx - 1]);
+}
+
+export function jumpToQuestion(index) {
+    if (!assessmentQuestions || index < 0 || index >= assessmentQuestions.length) return;
+    currentAssessment.quizIndex = index;
+    renderQuizQuestion();
 }
 
 export function handleAnswerSelection(optionIndex) {
@@ -107,11 +113,36 @@ export function renderQuizQuestion() {
         optsContainer.innerHTML = q.options.map((opt, i) => `
             <div class="quiz-option-card ${currentAssessment.answers[idx] === i ? 'selected' : ''}"
                  onclick="handleAnswerSelection(${i})">
-                <span class="quiz-opt-letter">${String.fromCharCode(65 + i)}</span>
-                <span>${opt.text || opt}</span>
+                <div class="quiz-opt-letter-box">
+                    <span class="quiz-opt-letter">${String.fromCharCode(65 + i)}</span>
+                </div>
+                <div class="quiz-opt-content">
+                    <span class="quiz-opt-text">${opt.text || opt}</span>
+                </div>
+                <div class="quiz-opt-check">
+                    ${currentAssessment.answers[idx] === i ? '✓' : ''}
+                </div>
             </div>
         `).join('');
     }
+
+    renderQuestionNav();
+}
+
+export function renderQuestionNav() {
+    const navGrid = document.getElementById('quizNavGrid');
+    const navContainer = document.getElementById('quizNavigationContainer');
+    if (!navGrid || !assessmentQuestions) return;
+
+    if (navContainer) navContainer.style.display = 'block';
+
+    navGrid.innerHTML = assessmentQuestions.map((_, i) => {
+        let statusClass = '';
+        if (i === currentAssessment.quizIndex) statusClass = 'current';
+        else if (currentAssessment.answers[i] !== null) statusClass = 'answered';
+
+        return `<div class="quiz-nav-item ${statusClass}" onclick="jumpToQuestion(${i})">${i + 1}</div>`;
+    }).join('');
 }
 
 export function showResults() {
@@ -123,19 +154,114 @@ export function showResults() {
     const topBranch = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
     const branchKey = topBranch[0];
     const branchInfo = branchMapping ? branchMapping[branchKey] : null;
-    const branchName = branchInfo ? (branchInfo.name || branchKey) : branchKey;
+    
+    if (!branchInfo) return;
 
     const resultBranch = document.getElementById('resultBranch');
-    if (resultBranch) resultBranch.textContent = branchName;
+    if (resultBranch) resultBranch.textContent = branchInfo.name || branchKey;
 
-    const resultDesc = document.getElementById('resultDesc');
-    if (resultDesc) {
-        resultDesc.textContent = branchInfo ? (branchInfo.description || 'Based on your interests and academic performance.') : 'Based on your interests and academic performance.';
+    // Hide quiz navigation elements
+    const navContainer = document.getElementById('quizNavigationContainer');
+    if (navContainer) navContainer.style.display = 'none';
+    
+    const backNav = document.getElementById('assessmentBackNav');
+    if (backNav) backNav.style.display = 'none';
+
+    // Personalized Greeting
+    const userName = (currentAssessment.name) || "Student";
+    const greetingTitle = document.getElementById('resultGreetingTitle');
+    if (greetingTitle) greetingTitle.textContent = `"Hello, ${userName}! I've assigned your path..."`;
+
+    const greetingDesc = document.getElementById('resultGreetingDesc');
+    if (greetingDesc) {
+        greetingDesc.textContent = branchInfo.desc || "Based on your interests and academic performance, this path is highly recommended.";
     }
 
-    const resultTags = document.getElementById('resultTags');
-    if (resultTags && branchInfo && branchInfo.careers) {
-        resultTags.innerHTML = branchInfo.careers.slice(0, 5).map(c =>
-            `<span class="result-tag">${c}</span>`).join('');
+    // Highlights
+    const resultFuture = document.getElementById('resultFuture');
+    if (resultFuture) resultFuture.textContent = branchInfo.future || "";
+
+    const resultCareer = document.getElementById('resultCareer');
+    if (resultCareer) resultCareer.textContent = branchInfo.career || "";
+
+    const resultWhySuit = document.getElementById('resultWhySuit');
+    if (resultWhySuit) resultWhySuit.textContent = branchInfo.suitability || "";
+
+    // Deep Analysis
+    const resultDeepAnalysis = document.getElementById('resultDeepAnalysis');
+    if (resultDeepAnalysis) {
+        const physicsEdge = currentAssessment.marks?.physics > 80 ? "your strong performance in Physics" : "your analytical approach";
+        resultDeepAnalysis.textContent = `Hey ${userName}, let's look at your feedback. Based on ${physicsEdge} and your interest patterns, your profile suggests you're built for ${branchInfo.name}. Your quiz responses indicate a natural talent for this field.`;
+    }
+
+    // Key Edges (Tags)
+    const tags = branchInfo.tags || [];
+    ['resultKeyEdge', 'resultKeyEdge2', 'resultKeyEdge3'].forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = tags[i] ? tags[i].toUpperCase() : (i === 0 ? "CORE" : "");
+            el.style.display = tags[i] ? 'inline-block' : (i === 0 ? 'inline-block' : 'none');
+        }
+    });
+
+    // Pros List
+    const prosList = document.getElementById('resultProsList');
+    if (prosList && branchInfo.pros) {
+        prosList.innerHTML = branchInfo.pros.map(pro => `<li>${pro}</li>`).join('');
+    }
+
+    // Related Courses
+    const relatedContainer = document.getElementById('relatedCoursesContainer');
+    if (relatedContainer && relatedCoursesData && relatedCoursesData[branchKey]) {
+        relatedContainer.innerHTML = relatedCoursesData[branchKey].map(rel => {
+            const relInfo = branchMapping[rel.key];
+            return `
+                <div class="related-course-card-new" style="position: relative;">
+                    <span class="course-card-fav" onclick="toggleCourseFav('${rel.key}', this)">🤍</span>
+                    <span class="course-badge">${rel.why}</span>
+                    <h5>${relInfo ? relInfo.name : rel.key}</h5>
+                    <p>"${rel.desc}"</p>
+                    <div class="course-meta">${relInfo ? relInfo.desc.substring(0, 100) + '...' : ''}</div>
+                    <button class="btn-link-new" onclick="viewRelatedGuidance('${rel.key}')">View Guidance</button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Fix Explore Course Button
+    const exploreBtn = document.getElementById('exploreRecommended');
+    if (exploreBtn) {
+        exploreBtn.onclick = () => {
+            import('./ui.js').then(m => m.switchTab('courses'));
+        };
+    }
+
+    // Main Fav Btn logic
+    const mainFavBtn = document.getElementById('mainFavBtn');
+    if (mainFavBtn) {
+        mainFavBtn.onclick = () => toggleMainFav(branchKey);
     }
 }
+
+window.viewRelatedGuidance = function(branchKey) {
+    // Correctly reset quiz scores for the new branch to show results
+    currentAssessment.quizScores = { [branchKey]: 100 };
+    showResults();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.toggleMainFav = function(branchKey) {
+    const btn = document.getElementById('mainFavBtn');
+    if (!btn) return;
+    const isActive = btn.classList.toggle('active');
+    btn.textContent = isActive ? '❤️' : '🤍';
+    // Potential integration with state.js favorites could go here
+    console.log(`Toggled favorite for ${branchKey}: ${isActive}`);
+};
+
+window.toggleCourseFav = function(branchKey, el) {
+    if (!el) return;
+    const isActive = el.classList.toggle('active');
+    el.textContent = isActive ? '❤️' : '🤍';
+    console.log(`Toggled favorite for related ${branchKey}: ${isActive}`);
+};

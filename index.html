@@ -267,7 +267,7 @@
                         <div class="quiz-progress-container" style="margin-bottom: 2rem;">
                             <div
                                 style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.85rem; color:var(--text-muted);">
-                                <span id="quizStepText">Question 1 of 30</span>
+                                <span id="quizStepText">Question ...</span>
                                 <span id="quizPercentText">0% Complete</span>
                             </div>
                             <div
@@ -287,51 +287,101 @@
                         </div>
                     </div>
 
-                    <div id="resultContainer" class="form-card recommendation-result" style="display:none;">
-                        <div class="result-icon">🎓</div>
-                        <h3 class="result-title">Guidance for You</h3>
-                        <p id="resultBranch"
-                            style="font-size:1.5rem; font-weight:700; margin-bottom:0.5rem; color:var(--text);">
-                            Computer
-                            Science &amp; Engineering</p>
-                        <div class="result-desc" id="resultDesc">Based on your interests and academic performance.
+                    <div id="resultContainer" class="form-card assessment-guidance-page" style="display:none; padding: 0; background: transparent; box-shadow: none; border: none;">
+                        <div class="guidance-header-new">
+                            <div class="guidance-badge">
+                                <span class="badge-icon">🎓</span> Your Recommended Path
+                            </div>
+                            <h2 class="guidance-title">Goal Analysis: <span id="resultBranch" class="highlight-text">Computer Science & Engineering</span> <span class="fav-heart-btn" id="mainFavBtn">🤍</span></h2>
                         </div>
 
-
-                        <div class="recommendation-tags" id="resultTags">
-                            <!-- Tags populated by JS -->
-                        </div>
-
-                        <!-- Guidance & Suggestions Section -->
-                        <div id="guidanceSection" class="guidance-section">
-                            <div class="guidance-card" id="improvementGuidance">
-                                <div class="guidance-header">📈 Mark Improvement Guidance</div>
-                                <div id="improvementTipsList">
-                                    <!-- Tips added by JS -->
+                        <div class="guidance-content-new">
+                            <!-- AI Greeting Card -->
+                            <div class="ai-greeting-card">
+                                <div class="ai-avatar-box">
+                                    <div class="ai-avatar">🤖</div>
+                                </div>
+                                <div class="ai-greeting-content">
+                                    <span class="ai-tag">SMART ANALYTICS DRIVEN</span>
+                                    <h3 id="resultGreetingTitle">"Hello, Student! I've assigned your path..."</h3>
+                                    <p id="resultGreetingDesc">I can see from your test on Computer Science & Engineering. Let me give you a human perspective on why this fits you. Your natural talent with logic of flow and solution blueprints, which makes you a big edge creator as a creator of digital world.</p>
                                 </div>
                             </div>
 
-                            <div class="guidance-card" id="relatedGuidance">
-                                <div class="guidance-header">🤝 Related Course Guidance</div>
-                                <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Consider
-                                    these
-                                    related branches that align with your interests:</p>
-                                <div id="relatedCoursesList" class="related-courses-box">
-                                    <!-- Related courses added by JS -->
+                            <!-- Highlights Grid -->
+                            <div class="guidance-highlights-grid">
+                                <div class="highlight-card">
+                                    <div class="highlight-icon">🚀</div>
+                                    <div class="highlight-details">
+                                        <h4>The Future Scope</h4>
+                                        <p id="resultFuture">The world run effectively of high-tech and Artificial Intelligence. Digital world run effectively on big-data. Your edge builder can produce digital core transitions.</p>
+                                    </div>
+                                </div>
+                                <div class="highlight-card">
+                                    <div class="highlight-icon">💼</div>
+                                    <div class="highlight-details">
+                                        <h4>Typical Career Flow</h4>
+                                        <p id="resultCareer">Software Architect, Tech Analyst, Tech Lead, Cybersecurity Expert.</p>
+                                    </div>
+                                </div>
+                                <div class="highlight-card">
+                                    <div class="highlight-icon">🧩</div>
+                                    <div class="highlight-details">
+                                        <h4>Why this suits you</h4>
+                                        <p id="resultWhySuit">Your innovative mind and logical? That's what kind of cloud and digital core flow architecting of a creator and builder.</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div id="comparisonBreakdown" class="comparison-breakdown" style="display:none;">
-                            <h4 style="margin-bottom:1rem;">Match Breakdown</h4>
-                            <div id="breakdownList">
-                                <!-- Breakdown items populated by JS -->
+                            <!-- Deep Analysis Section -->
+                            <div class="deep-analysis-section">
+                                <div class="section-label-new">
+                                    <span class="label-emoji">💡</span> Why this path?
+                                </div>
+                                <p id="resultDeepAnalysis" class="analysis-text-new">Hey Student, let's look at your feedback. You scored enough in physics to refining the match score for computer science & engineering. It also being insights on logic and look your profile suggests you build for digital effects.</p>
+                                <div class="analysis-tag-box">
+                                    <span class="tag-title">KEY EDGE:</span>
+                                    <span class="tag-content" id="resultKeyEdge">ALGORITHMIC</span>
+                                    <span class="tag-content" id="resultKeyEdge2">AI</span>
+                                    <span class="tag-content" id="resultKeyEdge3">LOGIC</span>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="btn-group" style="justify-content:center;">
-                            <button class="btn-secondary" onclick="startAssessment()">Retake Quiz</button>
-                            <button class="btn-primary" id="exploreRecommended">Explore Branches</button>
+                            <!-- Points Section -->
+                            <div class="guidance-points-grid">
+                                <div class="points-card positive">
+                                    <h4><span class="point-emoji">✅</span> MAIN REASONS THIS JOB SUITS YOU</h4>
+                                    <ul id="resultProsList">
+                                        <li>High demand digital skills are highly favorable in most industries now for building software and digital components.</li>
+                                        <li>Creative yet logical is a core foundation of your work flow in modern CS. Engineering for computer is never repetitive for you.</li>
+                                        <li>Prestige of career as a core language of the threshold technology and high salary, improving reaching a brain degree engineering and high IT oriented.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Related Courses Section -->
+                            <div class="related-recommendations">
+                                <div class="section-label-new">
+                                    <span class="label-emoji">🌟</span> RELATED CAREER SUGGESTIONS
+                                </div>
+                                <p class="section-desc-new">Consider these alternatives that fit your high-logic pattern:</p>
+                                <div id="relatedCoursesContainer" class="related-courses-grid-new">
+                                    <!-- Populated by JS -->
+                                    <div class="related-course-card-new">
+                                        <span class="course-badge">Related AI</span>
+                                        <h5>Information Technology</h5>
+                                        <p>"Information Technology is a focused version of tech build in software and digital core tech driven system with automation."</p>
+                                        <div class="course-meta">Focused for Software Engineering branch foundation, but a different university. If applied software, can't find but based for more.</div>
+                                        <button class="btn-link-new">View Guidance</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="guidance-actions-new">
+                                <button class="btn-secondary-new" onclick="startAssessment()">Retake Quiz</button>
+                                <button class="btn-primary-new" id="exploreRecommended">Explore Course</button>
+                            </div>
                         </div>
                     </div>
                 </div>

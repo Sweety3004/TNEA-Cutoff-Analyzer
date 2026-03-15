@@ -34,6 +34,12 @@ export function switchTab(tabId) {
         targetLink.classList.add('active');
     }
 
+    // Toggle disclaimer banner (Notice box) - Only show on dashboard
+    const disclaimer = document.querySelector('.disclaimer-banner');
+    if (disclaimer) {
+        disclaimer.style.display = (tabId === 'dashboard') ? 'block' : 'none';
+    }
+
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
