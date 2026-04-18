@@ -14,7 +14,7 @@ To start the application locally, use the provided batch script:
 1. Open a terminal (PowerShell or Command Prompt) in the project root.
 2. Run the following command:
    ```powershell
-   .\launch_app.bat
+  .\launch_app.bat 
    ```
 3. The application will be available at `http://localhost:3000`.
 
